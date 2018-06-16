@@ -1,3 +1,7 @@
+package enumStudy;
+
+import enumStudy.EnumStash.TAG_CODE;
+
 public class EnumTest {
 	public static void main(String[] agrgs) {
 		String tagStr = "00";

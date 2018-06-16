@@ -1,3 +1,4 @@
+package tryCatch;
 
 public class TryFinallyNoCatch {
 	public static void main(String args[]) throws Exception {

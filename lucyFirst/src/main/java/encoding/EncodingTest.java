@@ -1,3 +1,4 @@
+package encoding;
 import java.io.UnsupportedEncodingException;
 
 public class EncodingTest {
