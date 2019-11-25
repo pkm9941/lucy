@@ -7,6 +7,8 @@ import java.sql.Statement;
 
 import org.h2.tools.DeleteDbFiles;
 
+import springbook.user.dao.ConnectionMaker;
+import springbook.user.dao.NConnectionMaker;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.User;
 
