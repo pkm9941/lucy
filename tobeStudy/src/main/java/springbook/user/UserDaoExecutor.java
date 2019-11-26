@@ -8,7 +8,7 @@ import java.sql.Statement;
 import org.h2.tools.DeleteDbFiles;
 
 import springbook.user.dao.ConnectionMaker;
-import springbook.user.dao.NConnectionMaker;
+import springbook.user.dao.DConnectionMaker;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.User;
 
@@ -17,7 +17,8 @@ public class UserDaoExecutor {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		initDb();
 		
-		UserDao dao = new UserDao();
+		ConnectionMaker connectionMaker = new DConnectionMaker();
+		UserDao dao = new UserDao(connectionMaker);
 
 		User user = new User();
 		user.setId("lucy");
