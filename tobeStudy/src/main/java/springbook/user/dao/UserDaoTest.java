@@ -1,4 +1,4 @@
-package springbook.user;
+package springbook.user.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,18 +7,14 @@ import java.sql.Statement;
 
 import org.h2.tools.DeleteDbFiles;
 
-import springbook.user.dao.ConnectionMaker;
-import springbook.user.dao.DConnectionMaker;
-import springbook.user.dao.UserDao;
 import springbook.user.domain.User;
 
-public class UserDaoExecutor {
+public class UserDaoTest {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		initDb();
 		
-		ConnectionMaker connectionMaker = new DConnectionMaker();
-		UserDao dao = new UserDao(connectionMaker);
+		UserDao dao = new DaoFactory().userDao();
 
 		User user = new User();
 		user.setId("lucy");
