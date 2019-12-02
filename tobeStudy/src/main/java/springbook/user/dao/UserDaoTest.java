@@ -33,6 +33,9 @@ public class UserDaoTest {
 		User user2 = new User();
 		user2 = dao.get(user.getId());
 		System.out.println(user2.getId() + " 조회 성공");
+		
+		CountingConnectionMaker countingConnectionMaker = context.getBean("connectionMaker", CountingConnectionMaker.class);
+		System.out.println("connection count : " + countingConnectionMaker.getCount());
 	}
 	
 	private static void initDb() throws ClassNotFoundException, SQLException {
