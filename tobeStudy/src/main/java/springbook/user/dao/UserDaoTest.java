@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.sql.DataSource;
+
 import org.h2.tools.DeleteDbFiles;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
@@ -14,11 +16,10 @@ import springbook.user.domain.User;
 public class UserDaoTest {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		initDb();
-		
+
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		
-		
+		initDb((DataSource)context.getBean("dataSource"));
+
 		UserDao dao = context.getBean("userDao", UserDao.class);
 
 		User user = new User();
@@ -29,16 +30,15 @@ public class UserDaoTest {
 		dao.add(user);
 
 		System.out.println(user.getId() + " 등록 성공");
-	
+
 		User user2 = new User();
 		user2 = dao.get(user.getId());
 		System.out.println(user2.getId() + " 조회 성공");
 	}
 	
-	private static void initDb() throws ClassNotFoundException, SQLException {
+	private static void initDb(DataSource dataSource) throws ClassNotFoundException, SQLException {
 		DeleteDbFiles.execute("~", "testdb", true); // drop db if exist 'testdb'
-        Class.forName("org.h2.Driver");
-        Connection c = DriverManager.getConnection("jdbc:h2:~/testdb", "lucy", "1234");
+        Connection c = dataSource.getConnection();
         Statement stmt = null;
         try {
             c.setAutoCommit(false);
