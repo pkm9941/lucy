@@ -32,12 +32,18 @@ public class UserDaoTest {
 	public void addAndGet() throws SQLException {
 		UserDao dao = context.getBean("userDao", UserDao.class);
 
+		dao.deleteAll();
+		int cntAfterDelete = dao.getCount();
+		assertThat("삭제 후 데이터 수 0", 0, is(cntAfterDelete));
+		
 		User user = new User();
 		user.setId("lucy");
 		user.setName("김연희");
 		user.setPassword("married");
 
 		dao.add(user);
+		int cntAfterAdd = dao.getCount();
+		assertThat("추가 후 데이터 수 1", 1, is(cntAfterAdd));
 
 		User user2 = new User();
 		user2 = dao.get(user.getId());
