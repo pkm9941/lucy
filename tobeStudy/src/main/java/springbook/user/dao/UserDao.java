@@ -22,9 +22,8 @@ public class UserDao {
             c.setAutoCommit(false);
             stmt = c.createStatement();
 
-            //stmt.execute("drop user lucy;");
-            stmt.execute("create schema if not exists lucy;");
-            stmt.execute("create table if not exists lucy.users (id varchar(50) primary key, name varchar(50), password varchar(50));");
+            stmt.execute("create schema lucy;");
+            stmt.execute("create table lucy.users (id varchar(50) primary key, name varchar(50), password varchar(50));");
             stmt.close();
             c.commit();
             
