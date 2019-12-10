@@ -3,18 +3,13 @@ package springbook.user.dao;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
-
-import javax.sql.DataSource;
-
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import springbook.user.domain.User;
 
@@ -22,15 +17,23 @@ public class UserDaoTest {
 
 	private static ApplicationContext context;
 	private UserDao dao;
-	
-	@BeforeClass
-	public static void beforeClass() throws BeansException, SQLException {
-		context = new GenericXmlApplicationContext("applicationContext.xml");
-	}
+	private User user1;
+	private User user2;
+	private User user3;
 	
 	@Before
-	public void init() {
+	public void setUp() {
+		context = new GenericXmlApplicationContext("applicationContext.xml");
 		dao = context.getBean("userDao", UserDao.class);
+		
+		user1 = new User("gyume", "박성철", "springno1");
+		user2 = new User("leegw700", "이길원", "springno2");
+		user3 = new User("bumjin", "박범진", "springno3");
+	}
+	
+	@After
+	public void tearDown() {
+		((GenericXmlApplicationContext)context).close();
 	}
 	
 	@Test
@@ -53,10 +56,6 @@ public class UserDaoTest {
 	
 	@Test
 	public void getCount() throws SQLException {
-		User user1 = new User("gyume", "박성철", "springno1");
-		User user2 = new User("leegw700", "이길원", "springno2");
-		User user3 = new User("bumjin", "박범진", "springno3");
-		
 		dao.deleteAll();
 		assertThat("삭제 후 0건", dao.getCount(), is(0));
 		dao.add(user1);
@@ -65,5 +64,11 @@ public class UserDaoTest {
 		assertThat("추가 후 2건", dao.getCount(), is(2));
 		dao.add(user3);
 		assertThat("추가 후 3건", dao.getCount(), is(3));
+	}
+	
+	@Test(expected=EmptyResultDataAccessException.class)
+	public void getUserFailure() throws SQLException {
+		dao.deleteAll();
+		dao.get("unknown_id");
 	}
 }
