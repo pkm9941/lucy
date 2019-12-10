@@ -3,28 +3,32 @@ package springbook.user.dao;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
+import java.sql.Driver;
 import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import springbook.user.domain.User;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserDaoTest {
-	@Autowired
 	private UserDao dao;
 	private User user1;
 	private User user2;
 	private User user3;
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws SQLException {
+		dao = new UserDao();
+		DataSource dataSource = new SimpleDriverDataSource(
+						new org.h2.Driver(), "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;", "lucy", "1234");
+		dao.setDataSource(dataSource);
+		
 		user1 = new User("gyume", "박성철", "springno1");
 		user2 = new User("leegw700", "이길원", "springno2");
 		user3 = new User("bumjin", "박범진", "springno3");
