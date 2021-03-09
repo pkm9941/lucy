@@ -17,14 +17,16 @@ public class TwoNumberPlus {
 	}
 
 	private static int[] getSortedPlusNumbers(int[] numbers) {
-		Set<Integer> plusNumbers = new HashSet<>();
+		Set<Integer> plusNumbers = new HashSet<>();//중복 제거를 위해 Set 선택
 		for (int index = 0; index < numbers.length - 1; index++) {
 			for (int otherIndex = index + 1; otherIndex < numbers.length; otherIndex++) {
 				plusNumbers.add(numbers[index] + numbers[otherIndex]);
 			}
 		}
 		
-		int[] sortedPlusNumbers = plusNumbers.stream().sorted().mapToInt(Integer::intValue).toArray();
+		int[] sortedPlusNumbers = plusNumbers.stream().sorted()
+										.mapToInt(Integer::intValue)//Integer를 int로 형변환
+										.toArray();
 		return sortedPlusNumbers;
 	}
 }
