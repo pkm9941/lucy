@@ -3,10 +3,24 @@ package exercise.all.lvl1.twoNumberPlus.nohhyungrae;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * 1. 클래스명	: TwoNumberPlus
+ * 2. 파일명	: TwoNumberPlus.java
+ * 3. 패키지명	: exercise.all.lvl1.twoNumberPlus.nohhyungrae
+ * 4. 작성자명	: noh.hyungrae
+ * 5. 작성일자	: 2021. 3. 9.
+ */
+/**
+ * <PRE>
+ * 1. 설명
+ *		두개의 수 더하기
+ * </PRE>
+ */ 
 public class TwoNumberPlus {
 	public static void main(String[] args) {
 		int[] numbers = {2,1,3,4,1};
 		System.out.println("result : "+solution(numbers));
+
 	}
 
 	/* 
@@ -32,4 +46,6 @@ public class TwoNumberPlus {
 		list.stream().sorted().forEach(System.out::println);
         return list.stream().sorted().mapToInt(i->i).toArray();
 	}
+	
+	
 }

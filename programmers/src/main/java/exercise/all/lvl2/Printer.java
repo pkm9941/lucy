@@ -43,7 +43,7 @@ public class Printer {
 	private Stack<Integer> generateSortedPriorities(int[] priorities) {
 		int[] sortedPriorities = priorities;
 		Arrays.sort(sortedPriorities);
-		Stack<Integer> maxPriorities = new Stack<>();
+		Stack<Integer> maxPriorities = new Stack<Integer>();
 		for(int i = 0; i < priorities.length; i++) {
 			maxPriorities.push(priorities[i]);
 		}
