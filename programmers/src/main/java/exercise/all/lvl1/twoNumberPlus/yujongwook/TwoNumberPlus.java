@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
  * 
  * 
  * 1. 문제 설명
- * 정수 배열 numbers가 주어집니다. numbers에서 서로 다른 인덱스에 있는 두 개의 수를 뽑아 더해서 만들 수 있는 모든 수를 배열에 오름차순으로 담아 return 하도록 solution 함수를 완성해주세요.
+ * 정수 배열 numbers 가 주어집니다. numbers 에서 서로 다른 인덱스에 있는 두 개의 수를 뽑아 더해서 만들 수 있는 모든 수를 배열에 오름차순으로 담아 return 하도록 solution 함수를 완성해주세요.
  * 
  * 2. 제한사항
- * numbers의 길이는 2 이상 100 이하입니다. numbers의 모든 수는 0 이상 100 이하입니다.
+ * numbers 의 길이는 2 이상 100 이하입니다. numbers 의 모든 수는 0 이상 100 이하입니다.
  * 
  * 3. info
  * 1) Collections.sort 는 Arrays.sort 보다 느리다
@@ -41,10 +41,6 @@ public class TwoNumberPlus {
 		System.out.println("=== [2] MultiForTest2 ===");
 		print(MultiForTest2(numbers));
 		
-		//[3] MultiForTest3
-		System.out.println("=== [3] MultiForTest3 ===");
-		print(MultiForTest3(numbers));
-		
 	}
 	
 	public enum MODE {
@@ -53,19 +49,17 @@ public class TwoNumberPlus {
 	}
 	
 	
-	//setVriables
+	//setVariables
 	public static int[] setVar (MODE mode, int cnt) {
 		
 		int[] result = null;
 		
 		switch(mode) {
 		case DEFAULT :
-			int[] v1 = {2,1,3,4,1};
-			result = v1;
+			result = new int[]{2, 1, 3, 4, 1};
 			break;
 		case RANDOM :
 			Random random = new Random();
-			int v2[] = new int[cnt];
 			List<Integer> arr = new ArrayList<>();
 			for (int i=0; i<cnt; i++) {
 				arr.add(random.nextInt(cnt));
@@ -76,41 +70,28 @@ public class TwoNumberPlus {
 		
 		return result;
 	}
-	
-	
+
 	//Console
-	public static void print(List<Integer> result) {
-		for (int cnt=0; cnt<result.size(); cnt++) {
-			System.out.println(result.get(cnt));
+	public static void print(int[] result) {
+		/*
+		StringJoiner joiner = new StringJoiner(",");
+		for (int i : result) {
+			Integer integer = i;
+			String s = String.valueOf(integer);
+			joiner.add(s);
 		}
+		System.out.println(joiner.toString());
+		*/
+		System.out.println(Arrays.stream(result).boxed().map(String::valueOf).collect(Collectors.joining(",")));
 	}
-	
 	
 	//MultiForTest1
-	public static List<Integer> MultiForTest1(int[] numbers){
+	public static int[] MultiForTest1(int[] numbers){
 		List<Integer> arr = new ArrayList<>();
 		
 		int length = numbers.length;
-		for (int i=0; i<length; i++) {
-			for (int j=0; j<length; j++) {
-				int sum = numbers[i] +numbers[j];
-				if (!arr.contains(numbers[i] +numbers[j])) {
-					arr.add(sum);
-				}
-			}
-		}
-		Collections.sort(arr);
-		
-		return arr;
-	}
-	
-	//MultiForTest2
-	public static List<Integer> MultiForTest2(int[] numbers){
-		List<Integer> arr = new ArrayList<>();
-		
-		int length = numbers.length;
-		for (int i=0; i<length; i++) {
-			for (int j=i; j<length; j++) {
+		for (int i=0; i<length-1; i++) {
+			for (int j=i+1; j<length; j++) {
 				int sum = numbers[i] +numbers[j];
 				if (!arr.contains(sum)) arr.add(sum);
 			}
@@ -118,22 +99,21 @@ public class TwoNumberPlus {
 		
 		Collections.sort(arr);
 		
-		return arr;
+		return arr.stream().mapToInt(Integer::intValue).toArray();
 	}
 	
-	//MultiForTest3
-	public static List<Integer> MultiForTest3(int[] numbers){
+	//MultiForTest2
+	public static int[] MultiForTest2(int[] numbers){
 		List<Integer> arr = new ArrayList<>();
 		
 		int length = numbers.length;
-		for (int i=0; i<length; i++) {
-			for (int j=i; j<length; j++) {
+		for (int i=0; i<length-1; i++) {
+			for (int j=i+1; j<length; j++) {
 				arr.add(numbers[i] +numbers[j]);				
 			}
 		}
-		List<Integer> ans = arr.stream().sorted().distinct().collect(Collectors.toList());
-		
-		return ans;
+
+		return arr.stream().sorted().distinct().mapToInt(Integer::intValue).toArray();
 	}
 	
 }
