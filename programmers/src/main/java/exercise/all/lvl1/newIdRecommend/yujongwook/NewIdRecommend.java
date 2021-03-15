@@ -128,8 +128,7 @@ public class NewIdRecommend {
 		System.out.println("::::: 변환전 : " + orgId);
 
 		if (validator(orgId)){
-			//Optional<String> opt = Optional.ofNullable(orgId)
-			Optional.ofNullable(orgId)
+			Optional<String> applyId = Optional.ofNullable(orgId)
 					.map(o -> stepPrint("1", o, o.toLowerCase()))
 					.map(o -> stepPrint("2", o, o.replaceAll("[^a-z0-9-_.]", "")))
 					.map(o -> stepPrint("3", o, o.replaceAll("\\.+", ".")))
@@ -149,6 +148,7 @@ public class NewIdRecommend {
 						if (a.length() <= 2) a = String.format("%-3s", a).replace(" ",a.substring(a.length()-1));
 						return stepPrint("7", o, a);
 					});
+			System.out.println("::::: 결과 문자열 = " + applyId.get());
 		}
 	}
 
