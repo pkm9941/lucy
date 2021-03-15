@@ -128,7 +128,7 @@ public class NewIdRecommend {
 		System.out.println("::::: 변환전 : " + orgId);
 
 		if (validator(orgId)){
-//			Optional<String> opt = Optional.ofNullable(orgId)
+			//Optional<String> opt = Optional.ofNullable(orgId)
 			Optional.ofNullable(orgId)
 					.map(o -> stepPrint("1", o, o.toLowerCase()))
 					.map(o -> stepPrint("2", o, o.replaceAll("[^a-z0-9-_.]", "")))
