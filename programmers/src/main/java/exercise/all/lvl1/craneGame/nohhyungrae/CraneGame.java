@@ -25,7 +25,20 @@ public class CraneGame {
 	static String exit = "EXIT";
 	
 	public static void main(String[] args) {
-		start();
+		//start();
+		
+		int[][] boards = {
+				 
+		         {0,0,0,0,0},
+		         {0,0,1,0,3},
+		         {0,2,5,0,1},
+		         {4,2,4,4,2},
+		         {3,5,1,3,1}
+		};
+		
+		int [] moves = {1,5,3,5,1,2,1,4};
+		
+		System.out.println("solution() : "+ solution(boards, moves));
 	}
 	
 	public static void map(int x) {
@@ -137,4 +150,47 @@ public class CraneGame {
 		}
 		return reminder;
 	}
+	
+	//----------문제풀이--------------------------------------------------------------------------------------------------
+	
+	static List<Integer> basket = new LinkedList<>();
+	
+    public static int solution(int[][] board, int[] moves) {
+    	
+    	int count=0;
+        for(int item : moves){
+        	count += picker(board ,item-1);
+        }
+        
+        return count;
+    }
+    
+    public static int picker(int[][] board,int x) {
+    	int pic=0, add = 0;
+		for(int i=0;i<board.length; i++) {
+			if(board[i][x] != 0) {
+				pic =board[i][x];
+				if(basket.size() > 0) {
+					add = checkBaskets(pic);
+				}else {
+					basket.add(pic);
+				}
+				board[i][x] = 0;
+				break;
+			}
+		}
+		return add;
+	}
+    
+	public static int checkBaskets(int picItem) {
+		int add = 0;
+		if(basket.get(basket.size()-1).equals(picItem)) {
+			basket.remove(basket.size()-1);
+			add =  2;
+		}else {
+			basket.add(picItem);
+		}
+		return add;
+	}
+
 }

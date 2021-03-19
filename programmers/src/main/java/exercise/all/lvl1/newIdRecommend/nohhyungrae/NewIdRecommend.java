@@ -1,6 +1,24 @@
 package exercise.all.lvl1.newIdRecommend.nohhyungrae;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
+/*
+ * 1. 클래스명	: NewIdRecommend
+ * 2. 파일명	: NewIdRecommend.java
+ * 3. 패키지명	: exercise.all.lvl1.newIdRecommend.nohhyungrae
+ * 4. 작성자명	: noh.hyungrae
+ * 5. 작성일자	: 2021. 3. 10.
+ */
+/**
+ * <PRE>
+ * 1. 설명
+ *		신규 아이디 추천
+ * </PRE>
+ */ 
 public class NewIdRecommend {
 	public static void main(String[] args) {
 		String id1 = "...!@BaT#*..y.abcd-e__fghijklm.";
@@ -12,6 +30,8 @@ public class NewIdRecommend {
 		System.out.println("result : "+solution(id3));
 
 	}
+	
+	
 	
 	public static String solution(String new_id) {
 		
@@ -48,6 +68,8 @@ public class NewIdRecommend {
 				new_id7 += a;
 			}
 		}
+		
+		//Optional<Integer> pot = Optional.empty();
 		
 		return new_id7;
 	}
