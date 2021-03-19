@@ -18,7 +18,7 @@ public class CraneGame {
 	
 	static Scanner sc = new Scanner(System.in);
 	
-	static int x = 1, bx = 0, pic = 0;
+	static int x = 1, bx = 0, pic = 0, count = 0, picCount = 0;
 	
 	static List<Integer> basketList = new LinkedList<>();
 	
@@ -28,8 +28,7 @@ public class CraneGame {
 		move();
 	}
 	
-	public static boolean map(int x) {
-		boolean result = false;
+	public static void map(int x) {
 
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
@@ -55,7 +54,6 @@ public class CraneGame {
 			
 			System.out.println();
 		}
-		return result;
 	}
 	
 	public static void move() {
@@ -90,24 +88,26 @@ public class CraneGame {
 			}
 			map(x);
 			
-			if (input.toUpperCase().equals(exit)) {
+			//하드코딩;;; 인형 집은 갯수
+			if(input.toUpperCase().equals(exit) || picCount > 14 && checkFinished() == 0) {
+				System.out.println("총 "+count+"쌍을 맞추었습니다.");
 				System.out.println("게임이 끝났습니다.");
 				break;
-			} 
+			}
 
 		}
 	}
 	
 	public static int picker(int x) {
 		int item = 0;
-		
 		for(int i=1;i<board.length-1; i++) {
 			if(board[i][x] != 0) {
 				pic =board[i][x];
-				if(basketList.size() >1) {
+				if(basketList.size() > 0) {
 					checkBasket(pic);
 				}else {
 					basketList.add(pic);
+					picCount++;
 				}
 				board[i][x] = 0;
 				break;
@@ -120,8 +120,22 @@ public class CraneGame {
 	public static void checkBasket(int picItem) {
 		if(basketList.get(basketList.size()-1).equals(picItem)) {
 			basketList.remove(basketList.size()-1);
+			count++;
 		}else {
 			basketList.add(pic);
 		}
+		picCount++;
+	}
+	
+	public static int checkFinished() {
+		int reminder = 0;
+		for(int i=1;i<board.length-1; i++) {
+			for(int j=1; j<board.length-1; j++) {
+				if(board[i][j] != 0 && board[i][j] != 9) {
+					reminder++;
+				}
+			}
+		}
+		return reminder;
 	}
 }
