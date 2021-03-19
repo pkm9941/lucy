@@ -25,7 +25,7 @@ public class CraneGame {
 	static String exit = "EXIT";
 	
 	public static void main(String[] args) {
-		move();
+		start();
 	}
 	
 	public static void map(int x) {
@@ -56,10 +56,10 @@ public class CraneGame {
 		}
 	}
 	
-	public static void move() {
+	public static void start() {
 		//초기 맵 그리기
 		map(x);
-		//잡은 아이템 표시
+		
 		while(true) {
 			String input = sc.next();
 			//System.out.print(" : "+input.toUpperCase());
@@ -83,9 +83,9 @@ public class CraneGame {
 			System.out.println("바구니 : "+basketList.toString());
 			
 			//집게가 범위밖으로 나가지 못하게 하기위한 예외처리
-			if(x == 0 || x == 6) {
+			if(x == 0 || x == 6)
 				x = bx;
-			}
+
 			map(x);
 			
 			//하드코딩;;; 인형 집은 갯수
@@ -113,7 +113,6 @@ public class CraneGame {
 				break;
 			}
 		}
-		
 		return item;
 	}
 	
