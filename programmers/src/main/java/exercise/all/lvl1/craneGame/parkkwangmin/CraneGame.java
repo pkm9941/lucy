@@ -20,8 +20,7 @@ public class CraneGame {
 		int height = board[0].length;
 		
 		//moves 만큼 반복해서 크레인 동작
-		for (int i = 0; i < moves.length; i++) {
-			int cranePosition = moves[i];
+		for (int cranePosition : moves) {
 			//크레인 위치 잡고 아래로 내려가면서 최초로 잡히는 인형 찾기
 			for (int j = 0; j < height; j++) {
 				if (board[j][cranePosition - 1] > 0) {//인형 있음
