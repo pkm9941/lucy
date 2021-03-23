@@ -6,6 +6,7 @@ public class CraneGame {
 	
 	private int[][] board = null;
 	private int boardDepth = 0;
+	Stack<Integer> dollsOfBasket = new Stack<>();//가장 나중에 담긴 인형과 일치 여부를 비교해야 하므로 stack 선택
 	
 	public CraneGame(int[][] board) {
 		this.board = board;
@@ -22,7 +23,6 @@ public class CraneGame {
 	}
 
 	public int playCraneGame(int[] moves) {
-		Stack<Integer> dollsOfBasket = new Stack<>();//가장 나중에 담긴 인형과 일치 여부를 비교해야 하므로 stack 선택
 		int explodedDollCnt = 0;
 		
 		//moves 만큼 반복해서 크레인 동작
@@ -31,13 +31,12 @@ public class CraneGame {
 			for (int craneDepth = 1; craneDepth <= boardDepth; craneDepth++) {
 				if (board[craneDepth - 1][cranePosition - 1] == 0) continue; //인형 없으면 한 칸 더 깊히 이동
 				
-				int raisedDoll = board[craneDepth - 1][cranePosition - 1];
-				
 				if (dollsOfBasket.isEmpty()) {
-					dollsOfBasket.push(raisedDoll);
-					board[craneDepth - 1][cranePosition - 1] = 0;
+					moveDollToBasket(craneDepth, cranePosition);
 					break;
 				}
+				
+				int raisedDoll = board[craneDepth - 1][cranePosition - 1];
 				
 				int poppedDoll = dollsOfBasket.pop();
 				if (raisedDoll == poppedDoll) {
@@ -52,5 +51,11 @@ public class CraneGame {
 		}
 		
 		return explodedDollCnt;
+	}
+
+	private void moveDollToBasket(int craneDepth, int cranePosition) {
+		int raisedDoll = board[craneDepth - 1][cranePosition - 1];
+		board[craneDepth - 1][cranePosition - 1] = 0;
+		dollsOfBasket.push(raisedDoll);
 	}
 }
