@@ -17,12 +17,12 @@ public class CraneGame {
 		Stack<Integer> dollsOfBasket = new Stack<>();
 		int explodedDollCnt = 0;
 		
-		int height = board[0].length;
+		int depth = board[0].length;
 		
 		//moves 만큼 반복해서 크레인 동작
 		for (int cranePosition : moves) {
 			//크레인 위치 잡고 아래로 내려가면서 최초로 잡히는 인형 찾기
-			for (int j = 0; j < height; j++) {
+			for (int j = 0; j < depth; j++) {
 				if (board[j][cranePosition - 1] > 0) {//인형 있음
 					int raisedDoll = board[j][cranePosition - 1];
 					if (dollsOfBasket.isEmpty()) {
