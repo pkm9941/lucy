@@ -7,6 +7,7 @@ public class CraneGame {
 	private int[][] board = null;
 	private int boardDepth = 0;
 	Stack<Integer> dollsOfBasket = new Stack<>();//가장 나중에 담긴 인형과 일치 여부를 비교해야 하므로 stack 선택
+	private int explodedDollCnt = 0;
 	
 	public CraneGame(int[][] board) {
 		this.board = board;
@@ -18,44 +19,54 @@ public class CraneGame {
 		CraneGame game = new CraneGame(board);
 		
 		int[] moves = {1,5,3,5,1,2,1,4};
-		int explodedDollCnt = game.playCraneGame(moves);
-		System.out.println("explodedDollCnt : " + explodedDollCnt);
+		game.playCraneGame(moves);
+		System.out.println("explodedDollCnt : " + game.getExplodedDollCnt());
 	}
 
-	public int playCraneGame(int[] moves) {
-		int explodedDollCnt = 0;
+	public void playCraneGame(int[] moves) {
+		explodedDollCnt = 0;
 		
 		//moves 만큼 반복해서 크레인 동작
 		for (int cranePosition : moves) {
 			//크레인 위치 잡고 아래로 내려가면서 최초로 잡히는 인형 찾기
 			for (int craneDepth = 1; craneDepth <= boardDepth; craneDepth++) {
-				if (board[craneDepth - 1][cranePosition - 1] == 0) continue; //인형 없으면 한 칸 더 깊히 이동
+				if (board[craneDepth - 1][cranePosition - 1] == 0) continue; //인형 없으면 한 칸 더 아래로 이동
 				
-				if (dollsOfBasket.isEmpty()) {
-					moveDollToBasket(craneDepth, cranePosition);
-					break;
-				}
+				moveDollToBasket(craneDepth, cranePosition);
 				
-				int raisedDoll = board[craneDepth - 1][cranePosition - 1];
-				
-				int poppedDoll = dollsOfBasket.pop();
-				if (raisedDoll == poppedDoll) {
+				if (isSameDollsInTopOfBasket()) {
+					explodeTowDollInTopOfBasket();
 					explodedDollCnt += 2;
-				} else {
-					dollsOfBasket.push(poppedDoll);
-					dollsOfBasket.push(raisedDoll);
 				}
-				board[craneDepth - 1][cranePosition - 1] = 0;
+				
 				break;
 			}
 		}
+	}
+	
+	public int getExplodedDollCnt() {
+		return this.explodedDollCnt;
+	}
+
+	private void explodeTowDollInTopOfBasket() {
+		dollsOfBasket.pop();
+		dollsOfBasket.pop();
+	}
+
+	private boolean isSameDollsInTopOfBasket() {
+		if (dollsOfBasket.size() < 2) return false;
 		
-		return explodedDollCnt;
+		int topDoll = dollsOfBasket.get(dollsOfBasket.size() - 1);
+		int nextDoll = dollsOfBasket.get(dollsOfBasket.size() - 2);
+		
+		if (topDoll == nextDoll) return true;
+		
+		return false;
 	}
 
 	private void moveDollToBasket(int craneDepth, int cranePosition) {
-		int raisedDoll = board[craneDepth - 1][cranePosition - 1];
+		int doll = board[craneDepth - 1][cranePosition - 1];
 		board[craneDepth - 1][cranePosition - 1] = 0;
-		dollsOfBasket.push(raisedDoll);
+		dollsOfBasket.push(doll);
 	}
 }
