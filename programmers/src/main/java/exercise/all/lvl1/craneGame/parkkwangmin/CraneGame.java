@@ -28,7 +28,7 @@ public class CraneGame {
 					int raisedDoll = board[j][cranePosition - 1];
 					if (dollsOfBasket.isEmpty()) {
 						dollsOfBasket.push(raisedDoll);
-						continue;
+						break;
 					}
 					
 					int poppedDoll = dollsOfBasket.pop();
@@ -38,7 +38,7 @@ public class CraneGame {
 						dollsOfBasket.push(poppedDoll);
 						dollsOfBasket.push(raisedDoll);
 					}
-					continue;
+					break;
 				}
 			}
 		}
