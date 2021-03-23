@@ -5,9 +5,11 @@ import java.util.Stack;
 public class CraneGame {
 	
 	private int[][] board = null;
+	private int boardDepth = 0;
 	
 	public CraneGame(int[][] board) {
 		this.board = board;
+		this.boardDepth = board[0].length;
 	}
 
 	public static void main(String[] args) {
@@ -22,8 +24,6 @@ public class CraneGame {
 	public int playCraneGame(int[] moves) {
 		Stack<Integer> dollsOfBasket = new Stack<>();//가장 나중에 담긴 인형과 일치 여부를 비교해야 하므로 stack 선택
 		int explodedDollCnt = 0;
-		
-		int boardDepth = board[0].length;
 		
 		//moves 만큼 반복해서 크레인 동작
 		for (int cranePosition : moves) {
