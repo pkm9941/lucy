@@ -3,16 +3,23 @@ package exercise.all.lvl1.craneGame.parkkwangmin;
 import java.util.Stack;
 
 public class CraneGame {
+	
+	private int[][] board = null;
+	
+	public CraneGame(int[][] board) {
+		this.board = board;
+	}
+
 	public static void main(String[] args) {
-		
-		CraneGame game = new CraneGame();
 		int[][] board = {{0,0,0,0,0},{0,0,1,0,3},{0,2,5,0,1},{4,2,4,4,2},{3,5,1,3,1}};
+		CraneGame game = new CraneGame(board);
+		
 		int[] moves = {1,5,3,5,1,2,1,4};
-		int explodedDollCnt = game.playCraneGame(board, moves);
+		int explodedDollCnt = game.playCraneGame(moves);
 		System.out.println("explodedDollCnt : " + explodedDollCnt);
 	}
 
-	public int playCraneGame(int[][] board, int[] moves) {
+	public int playCraneGame(int[] moves) {
 		Stack<Integer> dollsOfBasket = new Stack<>();//가장 나중에 담긴 인형과 일치 여부를 비교해야 하므로 stack 선택
 		int explodedDollCnt = 0;
 		
