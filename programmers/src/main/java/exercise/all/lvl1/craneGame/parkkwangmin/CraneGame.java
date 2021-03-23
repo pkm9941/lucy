@@ -28,14 +28,14 @@ public class CraneGame {
 		//moves 만큼 반복해서 크레인 동작
 		for (int cranePosition : moves) {
 			//크레인 위치 잡고 아래로 내려가면서 최초로 잡히는 인형 찾기
-			for (int craneDepth = 0; craneDepth < boardDepth; craneDepth++) {
-				if (board[craneDepth][cranePosition - 1] == 0) continue; //인형 없으면 한 칸 더 깊히 이동
+			for (int craneDepth = 1; craneDepth <= boardDepth; craneDepth++) {
+				if (board[craneDepth - 1][cranePosition - 1] == 0) continue; //인형 없으면 한 칸 더 깊히 이동
 				
-				int raisedDoll = board[craneDepth][cranePosition - 1];
+				int raisedDoll = board[craneDepth - 1][cranePosition - 1];
 				
 				if (dollsOfBasket.isEmpty()) {
 					dollsOfBasket.push(raisedDoll);
-					board[craneDepth][cranePosition - 1] = 0;
+					board[craneDepth - 1][cranePosition - 1] = 0;
 					break;
 				}
 				
@@ -46,7 +46,7 @@ public class CraneGame {
 					dollsOfBasket.push(poppedDoll);
 					dollsOfBasket.push(raisedDoll);
 				}
-				board[craneDepth][cranePosition - 1] = 0;
+				board[craneDepth - 1][cranePosition - 1] = 0;
 				break;
 			}
 		}
