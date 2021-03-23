@@ -35,7 +35,7 @@ public class CraneGame {
 	private void dropCrane(int cranePosition) {
 		//크레인 위치 잡고 아래로 하강
 		for (int craneDepth = 1; craneDepth <= boardDepth; craneDepth++) {
-			if (board[craneDepth - 1][cranePosition - 1] == 0) continue; //인형 없으면 한 칸 더 아래로 이동
+			if (emptyThisPosition(cranePosition, craneDepth)) continue; //인형 없으면 한 칸 더 아래로 이동
 			
 			moveDollToBasket(craneDepth, cranePosition);
 			
@@ -44,6 +44,10 @@ public class CraneGame {
 			
 			break;
 		}
+	}
+
+	private boolean emptyThisPosition(int cranePosition, int craneDepth) {
+		return board[craneDepth - 1][cranePosition - 1] == 0;
 	}
 
 	public int getExplodedDollCnt() {
