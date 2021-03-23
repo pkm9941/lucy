@@ -28,29 +28,34 @@ public class CraneGame {
 		
 		//moves 만큼 반복해서 크레인 동작
 		for (int cranePosition : moves) {
-			//크레인 위치 잡고 아래로 내려가면서 최초로 잡히는 인형 찾기
-			for (int craneDepth = 1; craneDepth <= boardDepth; craneDepth++) {
-				if (board[craneDepth - 1][cranePosition - 1] == 0) continue; //인형 없으면 한 칸 더 아래로 이동
-				
-				moveDollToBasket(craneDepth, cranePosition);
-				
-				if (isSameDollsInTopOfBasket()) {
-					explodeTowDollInTopOfBasket();
-					explodedDollCnt += 2;
-				}
-				
-				break;
-			}
+			dropCrane(cranePosition);
 		}
 	}
 	
+	private void dropCrane(int cranePosition) {
+		//크레인 위치 잡고 아래로 하강
+		for (int craneDepth = 1; craneDepth <= boardDepth; craneDepth++) {
+			if (board[craneDepth - 1][cranePosition - 1] == 0) continue; //인형 없으면 한 칸 더 아래로 이동
+			
+			moveDollToBasket(craneDepth, cranePosition);
+			
+			if (isSameDollsInTopOfBasket())
+				explodeTowDollInTopOfBasket();
+			
+			break;
+		}
+	}
+
 	public int getExplodedDollCnt() {
 		return this.explodedDollCnt;
 	}
 
 	private void explodeTowDollInTopOfBasket() {
 		dollsOfBasket.pop();
+		explodedDollCnt++;
+		
 		dollsOfBasket.pop();
+		explodedDollCnt++;
 	}
 
 	private boolean isSameDollsInTopOfBasket() {
