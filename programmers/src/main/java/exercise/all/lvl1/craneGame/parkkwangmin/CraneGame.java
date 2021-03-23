@@ -8,14 +8,14 @@ public class CraneGame {
 		CraneGame game = new CraneGame();
 		int[][] board = {{0,0,0,0,0},{0,0,1,0,3},{0,2,5,0,1},{4,2,4,4,2},{3,5,1,3,1}};
 		int[] moves = {1,5,3,5,1,2,1,4};
-		int explodedCnt = game.playCraneGame(board, moves);
-		System.out.println("explodedCnt : " + explodedCnt);
+		int explodedDollCnt = game.playCraneGame(board, moves);
+		System.out.println("explodedDollCnt : " + explodedDollCnt);
 	}
 
 	public int playCraneGame(int[][] board, int[] moves) {
 		//바구니의 인형들은 무엇에 담을까? 가장 나중에 담긴 인형과 일치 여부를 비교해야 하므로 stack에 담자. dollsOfBasket
 		Stack<Integer> dollsOfBasket = new Stack<>();
-		int explodedCnt = 0;
+		int explodedDollCnt = 0;
 		
 		int height = board[0].length;
 		
@@ -28,21 +28,23 @@ public class CraneGame {
 					int raisedDoll = board[j][cranePosition - 1];
 					if (dollsOfBasket.isEmpty()) {
 						dollsOfBasket.push(raisedDoll);
+						board[j][cranePosition - 1] = 0;
 						break;
 					}
 					
 					int poppedDoll = dollsOfBasket.pop();
 					if (raisedDoll == poppedDoll) {
-						explodedCnt++;
+						explodedDollCnt += 2;
 					} else {
 						dollsOfBasket.push(poppedDoll);
 						dollsOfBasket.push(raisedDoll);
 					}
+					board[j][cranePosition - 1] = 0;
 					break;
 				}
 			}
 		}
 		
-		return explodedCnt;
+		return explodedDollCnt;
 	}
 }
