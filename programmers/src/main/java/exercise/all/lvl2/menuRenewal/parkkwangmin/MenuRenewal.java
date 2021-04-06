@@ -13,12 +13,12 @@ public class MenuRenewal {
 		String[] orders = {"ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"};
 		int[] course = {2,3,4};
 		
-		String[] favorateCourse = getFavorateCourse(orders, course);
-		System.out.println(Arrays.asList(favorateCourse).stream().collect(Collectors.joining(",")));
+		String[] popularCourse = getPopularCourse(orders, course);
+		System.out.println(Arrays.asList(popularCourse).stream().collect(Collectors.joining(",")));
 	}
 
-	private static String[] getFavorateCourse(String[] orders, int[] course) {
-		List<String> courseList = new ArrayList<>();
+	private static String[] getPopularCourse(String[] orders, int[] course) {
+		List<String> popularCourseList = new ArrayList<>();
 		
 		for (int singleMenuCnt : course) {
 			Map<String, Integer> availableCourse = new HashMap<>();
@@ -70,10 +70,10 @@ public class MenuRenewal {
 											.map(t -> t.getKey())
 											.collect(Collectors.toList());
 			
-			courseList.addAll(theMaxOrdedCourseList);
+			popularCourseList.addAll(theMaxOrdedCourseList);
 		}
 		
-		List<String> orderedCourseList = courseList.stream().sorted().collect(Collectors.toList());
+		List<String> orderedCourseList = popularCourseList.stream().sorted().collect(Collectors.toList());
 		
 		return orderedCourseList.toArray(new String[0]);
 	}
