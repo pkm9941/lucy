@@ -28,17 +28,17 @@ public class MenuRenewal {
 			if (combinableCourse.isEmpty())
 				 continue;
 			
-			Map<String, Integer> orderInfoPerCourse = getNumberOfCombinableCourseOrdered(orders, combinableCourse);
+			Map<String, Integer> orderedCntInfoPerCourse = getOrderedCntPerCombinableCourse(orders, combinableCourse);
 			
 			//가장 많은 주문수를 구한다.
-			int maxOrderCnt = orderInfoPerCourse.entrySet().stream().
+			int maxOrderCnt = orderedCntInfoPerCourse.entrySet().stream().
 								mapToInt(t -> t.getValue().intValue()).max().orElse(0);
 			
 			if (maxOrderCnt < 2)
 				continue;
 			
 			//가장 많은 주문수의 코스 목록을 구한다.
-			List<String> theMaxOrdedCourseList =  orderInfoPerCourse.entrySet().stream().filter(t -> t.getValue() == maxOrderCnt)
+			List<String> theMaxOrdedCourseList =  orderedCntInfoPerCourse.entrySet().stream().filter(t -> t.getValue() == maxOrderCnt)
 											.map(t -> t.getKey())
 											.collect(Collectors.toList());
 			
@@ -50,8 +50,8 @@ public class MenuRenewal {
 		return orderedCourseList.toArray(new String[0]);
 	}
 
-	private static Map<String, Integer> getNumberOfCombinableCourseOrdered(String[] orders, Set<String> combinableCourse) {
-		Map<String, Integer> orderInfoPerCourse = new HashMap<>();
+	private static Map<String, Integer> getOrderedCntPerCombinableCourse(String[] orders, Set<String> combinableCourse) {
+		Map<String, Integer> orderedCntInfoPerCourse = new HashMap<>();
 		//조합된 코스별로 주문한 수를 계산한다
 		for (String theCourse : combinableCourse) {
 			for (String order : orders) {
@@ -63,11 +63,11 @@ public class MenuRenewal {
 					}
 				}
 				if (contains)
-					orderInfoPerCourse.put(theCourse, orderInfoPerCourse.getOrDefault(theCourse, 0) + 1);
+					orderedCntInfoPerCourse.put(theCourse, orderedCntInfoPerCourse.getOrDefault(theCourse, 0) + 1);
 			}
 		}
 		
-		return orderInfoPerCourse;
+		return orderedCntInfoPerCourse;
 	}
 
 	private static Set<String> getCombinableCourse(String[] orders, int menuCntInCourse) {
