@@ -20,22 +20,22 @@ public class MenuRenewal {
 	private static String[] getPopularCourse(String[] orders, int[] course) {
 		List<String> popularCourseList = new ArrayList<>();
 		
-		for (int singleMenuCnt : course) {
+		for (int menuCntInCourse : course) {
 			Map<String, Integer> availableCourse = new HashMap<>();
 			for (String order : orders) {
 				//단품메뉴 수만큼 경우의수를 어떻게 만들 것인가? 어떻게 순회할 것인가?
 				int orderMenuCnt = order.length();
-				if (orderMenuCnt < singleMenuCnt) continue;
+				if (orderMenuCnt < menuCntInCourse) continue;
 				
-				int[] cursor = new int[singleMenuCnt];//오더를 순회할 기준이 되는, 현재 순회중인 오더의 인덱스 정보를 가짐
-				for (int i = 0; i < singleMenuCnt; i++) {//첫 커서 생성
+				int[] cursor = new int[menuCntInCourse];//오더를 순회할 기준이 되는, 현재 순회중인 오더의 인덱스 정보를 가짐
+				for (int i = 0; i < menuCntInCourse; i++) {//첫 커서 생성
 					cursor[i] = i;
 				}
 				
 				addAvailableCourse(order, cursor, availableCourse);//조합된 코스를 담는다(재귀)
 			}
 			
-			System.out.println("singleMenuCnt : " + singleMenuCnt);
+			System.out.println("singleMenuCnt : " + menuCntInCourse);
 			System.out.println(availableCourse.keySet().stream().sorted().collect(Collectors.joining(",")));
 			System.out.println("=========");
 			
