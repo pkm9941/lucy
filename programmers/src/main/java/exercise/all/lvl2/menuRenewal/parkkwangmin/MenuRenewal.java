@@ -21,7 +21,7 @@ public class MenuRenewal {
 		List<String> popularCourseList = new ArrayList<>();
 		
 		for (int menuCntInCourse : course) {
-			Map<String, Integer> availableCourse = new HashMap<>();
+			Map<String, Integer> combinableCourse = new HashMap<>();
 			for (String order : orders) {
 				//단품메뉴 수만큼 경우의수를 어떻게 만들 것인가? 어떻게 순회할 것인가?
 				int orderMenuCnt = order.length();
@@ -32,18 +32,18 @@ public class MenuRenewal {
 					cursor[i] = i;
 				}
 				
-				addAvailableCourse(order, cursor, availableCourse);//조합된 코스를 담는다(재귀)
+				addAvailableCourse(order, cursor, combinableCourse);//조합된 코스를 담는다(재귀)
 			}
 			
 			System.out.println("singleMenuCnt : " + menuCntInCourse);
-			System.out.println(availableCourse.keySet().stream().sorted().collect(Collectors.joining(",")));
+			System.out.println(combinableCourse.keySet().stream().sorted().collect(Collectors.joining(",")));
 			System.out.println("=========");
 			
-			if (availableCourse.isEmpty())
+			if (combinableCourse.isEmpty())
 				 continue;
 			
 			//조합된 코스별로 주문한 수를 계산한다
-			for (String theCourse : availableCourse.keySet()) {
+			for (String theCourse : combinableCourse.keySet()) {
 				for (String order : orders) {
 					boolean contains = true;
 					for (int theSingleMenu : theCourse.chars().toArray()) {
@@ -53,20 +53,20 @@ public class MenuRenewal {
 						}
 					}
 					if (contains)
-						availableCourse.put(theCourse, availableCourse.get(theCourse) + 1);
+						combinableCourse.put(theCourse, combinableCourse.get(theCourse) + 1);
 					
 				}
 			}
 			
 			//가장 많은 주문수를 구한다.
-			int maxOrderCnt = availableCourse.entrySet().stream().
+			int maxOrderCnt = combinableCourse.entrySet().stream().
 								mapToInt(t -> t.getValue().intValue()).max().orElse(0);
 			
 			if (maxOrderCnt < 2)
 				continue;
 			
 			//가장 많은 주문수의 코스 목록을 구한다.
-			List<String> theMaxOrdedCourseList =  availableCourse.entrySet().stream().filter(t -> t.getValue() == maxOrderCnt)
+			List<String> theMaxOrdedCourseList =  combinableCourse.entrySet().stream().filter(t -> t.getValue() == maxOrderCnt)
 											.map(t -> t.getKey())
 											.collect(Collectors.toList());
 			
