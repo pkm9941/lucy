@@ -1,6 +1,7 @@
 package exercise.all.lvl2.menuRenewal.parkkwangmin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class MenuRenewal {
 		int[] course = {2,3,4};
 		
 		String[] favorateCourse = getFavorateCourse(orders, course);
+		System.out.println(Arrays.asList(favorateCourse).stream().collect(Collectors.joining(",")));
 	}
 
 	private static String[] getFavorateCourse(String[] orders, int[] course) {
@@ -66,14 +68,12 @@ public class MenuRenewal {
 			//가장 많은 주문수의 코스 목록을 구한다.
 			List<String> theMaxOrdedCourseList =  availableCourse.entrySet().stream().filter(t -> t.getValue() == maxOrderCnt)
 											.map(t -> t.getKey())
-//											.sorted()
 											.collect(Collectors.toList());
 			
 			courseList.addAll(theMaxOrdedCourseList);
 		}
 		
 		List<String> orderedCourseList = courseList.stream().sorted().collect(Collectors.toList());
-		System.out.println(orderedCourseList.stream().collect(Collectors.joining(",")));
 		
 		return orderedCourseList.toArray(new String[0]);
 	}
