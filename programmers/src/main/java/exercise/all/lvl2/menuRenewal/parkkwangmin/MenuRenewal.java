@@ -51,26 +51,6 @@ public class MenuRenewal {
 		return orderedCourseList.toArray(new String[0]);
 	}
 
-	private static Map<String, Integer> getOrderedCntPerCombinableCourse(String[] orders, Set<String> combinableCourse) {
-		Map<String, Integer> orderedCntInfoPerCourse = new HashMap<>();
-		//조합된 코스별로 주문한 수를 계산한다
-		for (String theCourse : combinableCourse) {
-			for (String order : orders) {
-				boolean contains = true;
-				for (int theSingleMenu : theCourse.chars().toArray()) {
-					if (order.indexOf(theSingleMenu) == -1) {
-						contains = false;
-						break;
-					}
-				}
-				if (contains)
-					orderedCntInfoPerCourse.put(theCourse, orderedCntInfoPerCourse.getOrDefault(theCourse, 0) + 1);
-			}
-		}
-		
-		return orderedCntInfoPerCourse;
-	}
-
 	private static Set<String> getCombinableCourse(String[] orders, int menuCntInCourse) {
 		Set<String> combinableCourse = new HashSet<>();
 		for (String order : orders) {
@@ -100,6 +80,15 @@ public class MenuRenewal {
 		addCourseOfCursor(order, cursor, combinableCourse);
 		
 		//다음 커서 지정
+		int[] nextCursor = getNextCursor(order, cursor);
+		
+		if (nextCursor ==  null) return;
+		
+		addCombinableCourse(order, nextCursor, combinableCourse);
+	}
+
+	private static int[] getNextCursor(String order, int[] cursor) {
+		
 		boolean movable = false;
 		int movableCursorIndex = 0;
 		for (int cursorIndex = cursor.length - 1; cursorIndex >= 0; cursorIndex--) {
@@ -120,17 +109,20 @@ public class MenuRenewal {
 			break;
 		}
 		
-		if (!movable) return;
+		if (!movable) return null;
 		
+		int[] nextCursor = new int[cursor.length];
 		for (int i = 0; i < cursor.length; i++) {
-			if (i == movableCursorIndex)
-				cursor[movableCursorIndex] += 1;
-			
-			if (i > movableCursorIndex)
-				cursor[i] = cursor[i - 1] + 1;
+			if (i < movableCursorIndex) {
+				nextCursor[i] = cursor[i];
+			} else if (i == movableCursorIndex) {
+				nextCursor[i] = cursor[i] + 1;
+			} else {
+				nextCursor[i] = nextCursor[i - 1] + 1;
+			}
 		}
 		
-		addCombinableCourse(order, cursor, combinableCourse);
+		return nextCursor;
 	}
 
 	private static void addCourseOfCursor(String order, int[] cursor, Set<String> combinableCourse) {
@@ -141,6 +133,26 @@ public class MenuRenewal {
 		//코스문자열을 알파벳순으로 정렬
 		String orderedCourse = courseOfCursor.chars().boxed().sorted().map(t -> String.valueOf(Character.toChars(t))).collect(Collectors.joining(""));
 		combinableCourse.add(orderedCourse);//코스후보군 셋에 저장
+	}
+
+	private static Map<String, Integer> getOrderedCntPerCombinableCourse(String[] orders, Set<String> combinableCourse) {
+		Map<String, Integer> orderedCntInfoPerCourse = new HashMap<>();
+		//조합된 코스별로 주문한 수를 계산한다
+		for (String theCourse : combinableCourse) {
+			for (String order : orders) {
+				boolean contains = true;
+				for (int theSingleMenu : theCourse.chars().toArray()) {
+					if (order.indexOf(theSingleMenu) == -1) {
+						contains = false;
+						break;
+					}
+				}
+				if (contains)
+					orderedCntInfoPerCourse.put(theCourse, orderedCntInfoPerCourse.getOrDefault(theCourse, 0) + 1);
+			}
+		}
+		
+		return orderedCntInfoPerCourse;
 	}
 	
 }
