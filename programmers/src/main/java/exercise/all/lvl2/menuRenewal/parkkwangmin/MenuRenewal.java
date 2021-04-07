@@ -38,11 +38,12 @@ public class MenuRenewal {
 				continue;
 			
 			//가장 많은 주문수의 코스 목록을 구한다.
-			List<String> theMaxOrdedCourseList =  orderedCntInfoPerCourse.entrySet().stream().filter(t -> t.getValue() == maxOrderCnt)
+			List<String> maxOrdedCourseList =  orderedCntInfoPerCourse.entrySet().stream()
+											.filter(t -> t.getValue() == maxOrderCnt)
 											.map(t -> t.getKey())
 											.collect(Collectors.toList());
 			
-			popularCourseList.addAll(theMaxOrdedCourseList);
+			popularCourseList.addAll(maxOrdedCourseList);
 		}
 		
 		List<String> orderedCourseList = popularCourseList.stream().sorted().collect(Collectors.toList());
@@ -96,13 +97,8 @@ public class MenuRenewal {
 		//커서의 마지막에 담긴 인덱스가 오더의 마지막 인덱스를 넘는 경우를 대비해 체크
 		if (cursor[cursor.length - 1] > order.length() - 1) return;
 		
-		String courseByCursor = "";
-		for (int index : cursor) {
-			courseByCursor += String.valueOf(order.charAt(index));//커서정보로 코스조합 생성
-		}
-		//코스문자열을 알파벳순으로 정렬
-		String orderedCourse = courseByCursor.chars().boxed().sorted().map(t -> String.valueOf(Character.toChars(t))).collect(Collectors.joining(""));
-		combinableCourse.add(orderedCourse);//코스후보군 맵에 저장
+		addCourseOfCursor(order, cursor, combinableCourse);
+		
 		//다음 커서 지정
 		boolean movable = false;
 		int movableCursorIndex = 0;
@@ -135,6 +131,16 @@ public class MenuRenewal {
 		}
 		
 		addCombinableCourse(order, cursor, combinableCourse);
+	}
+
+	private static void addCourseOfCursor(String order, int[] cursor, Set<String> combinableCourse) {
+		String courseOfCursor = "";
+		for (int index : cursor) {
+			courseOfCursor += String.valueOf(order.charAt(index));//커서정보로 코스조합 생성
+		}
+		//코스문자열을 알파벳순으로 정렬
+		String orderedCourse = courseOfCursor.chars().boxed().sorted().map(t -> String.valueOf(Character.toChars(t))).collect(Collectors.joining(""));
+		combinableCourse.add(orderedCourse);//코스후보군 셋에 저장
 	}
 	
 }
