@@ -6,6 +6,7 @@ public class Square {
 		int w = 9000;
 		int h= 121;
 		System.out.println("solution : "+solution(w,h));
+	
 	}
 	
 	public static long solution(int w, int h) {
