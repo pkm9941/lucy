@@ -13,7 +13,7 @@ public class Truck {
 		int[] truck_weights = {7,4,5,6};
 		
 		int bridge_length2 = 100; 
-		int weight2 = 100; 
+		int weight2 = 10000; 
 		int[] truck_weights2 = {10};
 		
 		int bridge_length3 = 100; 
@@ -24,31 +24,51 @@ public class Truck {
 		int weight4 = 5; 
 		int[] truck_weights4 = {2, 2, 2, 2, 1, 1, 1, 1, 1};
 		
-		System.out.println("solution : "+truckPassingTheBridge2(bridge_length4, weight4, truck_weights4));
+		System.out.println("solution : "+solution(bridge_length2, weight2, truck_weights2));
 	}
 	
-	public static int truckPassingTheBridge(int bridge_length, int weight, int[] truck_weights) {
-		int time = 0, totalweight = 0, afTruck =0;
-//		List<Integer> waitTruck = new LinkedList<Integer>();
-//		List<Integer> bridge = new LinkedList<Integer>();
-//		List<Integer> finish = new LinkedList<Integer>();
-		Queue<Integer> bridge =  new ArrayDeque();
-
+	public static int solution(int bridge_length, int weight, int[] truck_weights) {
+        int time = 0, totalweight = 0, index=0;
+		Queue<Integer> que =  new ArrayDeque<Integer>();
 		
+        for(int x=0; x<bridge_length; x++) { que.add(0); }
+        System.out.println("==========다리길이 : "+bridge_length+", ===========무게 : "+weight);
+        totalweight += truck_weights[index];
+        que.add(truck_weights[index++]);
+        que.poll();
+        time++;
 
+        while(!que.isEmpty()) {
+        	System.out.println("지난 시간 : "+time+"초 경과 "+" , 다리 : "+que.toString());
+            totalweight -= que.peek();
+            que.poll();
+            time++;
+            System.out.println("totalweight : "+totalweight);
+            if(joinBridgeCheck(totalweight,truck_weights ,index ,weight)) {
+                if(index < truck_weights.length) {
+                    totalweight += truck_weights[index];
+                    que.add(truck_weights[index++]);
+                }
+            }else {
+                que.add(0);
+            }
 
+        }
+        
+		System.out.println("지난 시간 : "+time+"초 경과 "+" , 다리 : "+que.toString());
         return time;
 	
 	}
-	 public static int getTotalWeight(List<Integer> brdg) {
+	
+	public static int getTotalWeight(List<Integer> brdg) {
 		 int tot = 0;
 		 for(int i=0; i<brdg.size(); i++) {
 			 tot += brdg.get(i);
 		 }
 		 return tot;
-	 }
+	}
 	 
-	 public static int getTotalWeight2(Queue<Integer> brdg) {
+	public static int getTotalWeight2(Queue<Integer> brdg) {
 		 int tot = 0;
 		 List<Integer> num = new LinkedList<Integer>();
 		 brdg.forEach(e->{ num.add(e); });
@@ -56,9 +76,23 @@ public class Truck {
 			 tot += num.get(i);
 		 }
 		 return tot;
-	 }
+	}
 	 
-	 public static boolean joinBridgeCheck(int tot, int nextTruck, int brdgWeight) {
+	public static boolean joinBridgeCheck(int tot, int[] truck_weights, int i , int brdgWeight) {
+		 boolean ch = true;
+		 int a = 0;
+		 if(i < truck_weights.length) a = truck_weights[i];
+		 
+		 if(tot+a <= brdgWeight) {
+			 ch = true;
+		 }else {
+			 ch = false;
+		 }
+		 
+		 return ch;
+	}
+	
+	public static boolean joinBridgeCheck1(int tot, int nextTruck, int brdgWeight) {
 		 boolean ch = true;
 		 
 		 if(tot+nextTruck <= brdgWeight) {
@@ -68,57 +102,10 @@ public class Truck {
 		 }
 		 
 		 return ch;
-	 }
-	 
-	 public static int truckPassingTheBridge2(int bridge_length, int weight, int[] truck_weights) {
-		int time = 0, totalweight = 0, afTruck =0, i=1;
-		List<Integer> waitTruck = new LinkedList<Integer>();
-		List<Integer> que =  new LinkedList<Integer>();
-		
-		for(int x=0; x<truck_weights.length; x++) {
-			waitTruck.add(truck_weights[x]);
-		}
-		
-		for(int x=0; x<bridge_length-1; x++) { 
-			que.add(0); 
-		}
-		
-		System.out.println("==========다리길이 : "+bridge_length+", ===========무게 : "+weight);
-		
-		que.add(waitTruck.get(0));
-		//que.poll();
-		waitTruck.remove(0);
-		//ime++;
-		
-		while(!que.isEmpty()) {
-			time++;
-			System.out.println("지난 시간 : "+time+"초 경과 "+" , 다리 : "+que.toString());
-			
-			totalweight = getTotalWeight(que);
-			afTruck = 0;
-			if(!waitTruck.isEmpty()) afTruck = waitTruck.get(0);
-			
-			System.out.println("totalweight : "+totalweight);
-			if(joinBridgeCheck(totalweight,afTruck,weight)) {
-				if(!waitTruck.isEmpty()) {
-					que.add(waitTruck.get(0));
-					waitTruck.remove(0);
-				}
-				que.remove(0);
-			}else {
-				que.add(0);
-				que.remove(0);
-			}
-			
-			
-		}
-		//time++;
-		System.out.println("지난 시간 : "+time+"초 경과 "+" , 다리 : "+que.toString());
-        return time;
-	
 	}
 	 
-	 public static int truckPassingTheBridge3(int bridge_length, int weight, int[] truck_weights) {
+	 
+	public static int solution2(int bridge_length, int weight, int[] truck_weights) {
 		 int time = 0, totalweight = 0, afTruck =0, i=1;
 		 List<Integer> waitTruck = new LinkedList<Integer>();
 		 Queue<Integer> que =  new ArrayDeque<Integer>();
@@ -132,22 +119,22 @@ public class Truck {
 		 }
 		 
 		 System.out.println("==========다리길이 : "+bridge_length+", ===========무게 : "+weight);
-		 
-		 que.add(waitTruck.get(0));
+	 
+		que.add(waitTruck.get(0));
 		 //que.poll();
-		 waitTruck.remove(0);
+		waitTruck.remove(0);
 		 //ime++;
-		 
-		 while(!que.isEmpty()) {
+	 
+		while(!que.isEmpty()) {
 			 time++;
 			 System.out.println("지난 시간 : "+time+"초 경과 "+" , 다리 : "+que.toString());
-			 
-			 totalweight = getTotalWeight2(que);
-			 afTruck = 0;
-			 if(!waitTruck.isEmpty()) afTruck = waitTruck.get(0);
-			 
-			 System.out.println("totalweight : "+totalweight);
-			 if(joinBridgeCheck(totalweight,afTruck,weight)) {
+		 
+		totalweight = getTotalWeight2(que);
+		afTruck = 0;
+		if(!waitTruck.isEmpty()) afTruck = waitTruck.get(0);
+		 
+		System.out.println("totalweight : "+totalweight);
+			if(joinBridgeCheck1(totalweight,afTruck,weight)) {
 				 if(!waitTruck.isEmpty()) {
 					 que.add(waitTruck.get(0));
 					 waitTruck.remove(0);
@@ -159,12 +146,12 @@ public class Truck {
 			 }
 			 
 			 
-		 }
-		 //time++;
-		 System.out.println("지난 시간 : "+time+"초 경과 "+" , 다리 : "+que.toString());
+		}
+		//time++;
+		System.out.println("지난 시간 : "+time+"초 경과 "+" , 다리 : "+que.toString());
 		 return time;
 		 
-	 }
+	}
 	
 //	public static int truckPassingTheBridge(int bridge_length, int weight, int[] truck_weights) {
 //		
