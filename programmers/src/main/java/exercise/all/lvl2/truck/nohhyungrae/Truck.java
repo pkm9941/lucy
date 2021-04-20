@@ -13,7 +13,7 @@ public class Truck {
 		int[] truck_weights = {7,4,5,6};
 		
 		int bridge_length2 = 100; 
-		int weight2 = 10000; 
+		int weight2 = 100; 
 		int[] truck_weights2 = {10};
 		
 		int bridge_length3 = 100; 
@@ -24,7 +24,7 @@ public class Truck {
 		int weight4 = 5; 
 		int[] truck_weights4 = {2, 2, 2, 2, 1, 1, 1, 1, 1};
 		
-		System.out.println("solution : "+solution(bridge_length2, weight2, truck_weights2));
+		System.out.println("solution : "+solution(bridge_length, weight, truck_weights));
 	}
 	
 	public static int solution(int bridge_length, int weight, int[] truck_weights) {
@@ -39,8 +39,8 @@ public class Truck {
         time++;
 
         while(!que.isEmpty()) {
-        	System.out.println("지난 시간 : "+time+"초 경과 "+" , 다리 : "+que.toString());
-            totalweight -= que.peek();
+        	System.out.println("지난 시간 : "+time+"초 경과 "+" , 다리 : "+que.toString()+" totalweight : "+totalweight);
+        	totalweight -= que.peek();
             que.poll();
             time++;
             System.out.println("totalweight : "+totalweight);
