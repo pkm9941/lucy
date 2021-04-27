@@ -3,7 +3,9 @@ package exercise.all.lvl2.largestNumber.parkkwangmin;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,7 +24,8 @@ public class LargestNumber {
 	
 	public static void main(String[] args) {
 		//System.out.println("abc".split("").length);
-		int[] numbers = {12, 1, 3, 98, 9, 120};
+		//int[] numbers = {12, 1, 3, 98, 9, 120};
+		int[] numbers = {0, 0, 0};
 		//String result = solution1(numbers);
 		String result2 = solution2(numbers);
 		
@@ -31,48 +34,32 @@ public class LargestNumber {
 		//
 	}
 
-	private static String solution2(int[] numbersArray) {
-		List<String> numbers = IntStream.of(numbersArray).boxed().map(i -> String.valueOf(i)).collect(Collectors.toList());
-		String maxLengthStr = Collections.max(numbers, new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				return o1.length() >= o2.length() ? 1 : -1;
-			}
-		});
+	public static String solution2(int[] numbers) {
+		Map<Integer, List<String>> numbersByLength = convertToMayKeyIsLength(numbers);
 		
-		List<List<String>> categorizedNumbers = new ArrayList<>();
-		int maxLength = maxLengthStr.length();
-		for (int i = 1; i <= maxLength; i++) {
-			List<String> sameLengths = new ArrayList<>();
-			for (String number : numbers) {
-				if (number.length() == i)
-					sameLengths.add(number);
-			}
-			Collections.sort(sameLengths, Collections.reverseOrder());
-			categorizedNumbers.add(sameLengths);
-		}
+		convertNumbersInReverseOrder(numbersByLength);
 		
-		List<String> result = new ArrayList<>();
-		
+		List<String> finalNumbers = new ArrayList<>();
 		while (true) {
-			if (!categorizedNumbers.stream().anyMatch(t -> !t.isEmpty()))
+			if (numbersByLength.isEmpty())
 				break;
 			
-			List<String> eachMaxNumber = categorizedNumbers.stream().filter(t -> !t.isEmpty()).map(t -> t.get(0)).collect(Collectors.toList());
-			if (eachMaxNumber.size() == 1) {
-				result.add(eachMaxNumber.get(0));
-				categorizedNumbers.forEach(t -> {
-					if (!t.isEmpty()) {
-						t.remove(0);
-					}
-				});
+			List<String> maxNumbersPerLength = numbersByLength.values().stream()
+															.map(v -> v.get(0)).collect(Collectors.toList());
+			
+			if (maxNumbersPerLength.size() == 1) {
+				finalNumbers.add(maxNumbersPerLength.get(0));
+				
+				int numberLength = maxNumbersPerLength.get(0).length();
+				numbersByLength.get(numberLength).remove(0);
+				if (numbersByLength.get(numberLength).isEmpty())
+					numbersByLength.remove(numberLength);
 				
 				continue;
 			}
 			
-			//순열조합
 			List<List<String>> combinedNumbers = new ArrayList<>();
-			combineNumber(new ArrayList<Integer>(), eachMaxNumber, combinedNumbers);
+			combineNumber(new ArrayList<Integer>(), maxNumbersPerLength, combinedNumbers);
 			
 			List<String> maxNumbers = Collections.max(combinedNumbers, new Comparator<List<String>>() {
 				@Override
@@ -88,16 +75,53 @@ public class LargestNumber {
 			});
 			
 			String maxNumber = maxNumbers.get(0);
-			result.add(maxNumber);
-			for (List<String> aCategorizedNumbers : categorizedNumbers) {
-				if (aCategorizedNumbers.contains(maxNumber)) {
-					aCategorizedNumbers.remove(0);
-					break;
-				}
-			}
+			finalNumbers.add(maxNumber);
+			
+			int maxNumberLength = maxNumber.length();
+			numbersByLength.get(maxNumberLength).remove(0);
+			if (numbersByLength.get(maxNumberLength).isEmpty())
+				numbersByLength.remove(maxNumberLength);
 		}
 		
-		return result.stream().collect(Collectors.joining());
+		if (finalNumbers.isEmpty() || Integer.valueOf(finalNumbers.get(0)) == 0) {
+			finalNumbers.clear();
+			finalNumbers.add("0");
+		}
+		
+		return finalNumbers.stream().collect(Collectors.joining());
+	}
+
+	private static Map<Integer, List<String>> convertToMayKeyIsLength(int[] numbers) {
+		List<String> stringNumbers = IntStream.of(numbers).boxed()
+														.map(i -> String.valueOf(i))
+														.collect(Collectors.toList());
+		
+		String maxLengthStr = Collections.max(stringNumbers, new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				return o1.length() >= o2.length() ? 1 : -1;
+			}
+		});
+		
+		Map<Integer, List<String>> mayKeyIsLength = new HashMap<>();
+		for (int i = 1; i <= maxLengthStr.length(); i++) {
+			List<String> sameLengths = new ArrayList<>();
+			for (String number : stringNumbers) {
+				if (number.length() == i)
+					sameLengths.add(number);
+			}
+			
+			if (sameLengths.isEmpty()) continue;
+			
+			Collections.sort(sameLengths, Collections.reverseOrder());
+			mayKeyIsLength.put(i, sameLengths);
+		}
+		return mayKeyIsLength;
+	}
+
+	private static void convertNumbersInReverseOrder(Map<Integer, List<String>> numbersByLength) {
+		for (int key : numbersByLength.keySet())
+			Collections.sort(numbersByLength.get(key), Collections.reverseOrder());
 	}
 
 	private static void combineNumber(List<Integer> currIndexs, List<String> eachMaxNumber, List<List<String>> combinedNumbers) {
