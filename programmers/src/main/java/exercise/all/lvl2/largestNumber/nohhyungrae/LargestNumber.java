@@ -20,7 +20,6 @@ public class LargestNumber {
 		System.out.println("solution5 : "+solution(num5));
 	}
 	
-	
 	public static String solution(int[] numbers) {
         String answer = "";
         String numb ="";
