@@ -50,15 +50,13 @@ public class Spy {
 							 , {"bluesunglasses", "face"}
 							 , {"smoky_makeup", "face"}};
 		
-		System.out.println("solution : "+solution(clothes1));
+		System.out.println("solution : "+solution(clothes2));
     }
 	private static int totalNumber = 0;
 	
 	public static int solution(String[][] clothes) {
         Map<String,List<String>> variety = new HashMap<>();
         List<String> ObjKey = new ArrayList<>();
-        System.out.println(clothes.length);
-        
         for(int i=0; i<clothes.length; i++) {
         	List<String> item  = new ArrayList<>();
         	if(variety.containsKey(clothes[i][1])) {
@@ -74,39 +72,34 @@ public class Spy {
         	if(!ObjKey.contains(clothes[i][1])) ObjKey.add(clothes[i][1]);
         }
         System.out.println(variety.toString());
-        System.out.println(variety.size());
+        System.out.println("종류 : "+variety.size());
         
         //모든경우(30가지)의 수는 재귀로 하게되면 시간초과가 나와서 따로 경우의 수 구해줌
         if(variety.size() == 30) {
         	return (int) Math.pow(2, clothes.length) -1;
         }
-        
+        //map에 정리해둔 의상 별 가지수
         int[] num = new int[variety.size()];
-        
         for(int i=0;i<variety.size(); i++) {
 			num[i] = variety.get(ObjKey.get(i)).size();
 		}
         
-        System.out.println(num.toString());
-        
         int n = num.length;
         boolean[] visited = new boolean[n];
-
         for (int i = 1; i <= n; i++) {
-            System.out.println("\n" + n + " 개 중에서 " + i + " 개 뽑기");
+            //경우의수 구하기
             combination(num, visited, 0, n, i);
         }
-
-        System.out.println(variety);
+        System.out.println();
         return totalNumber;
     }
 	
 	//경우의수 재귀 호출
-	public static void combination(int[] arr, boolean[] visited, int start, int n, int r) {
+	public static void combination(int[] arr, boolean[] check, int start, int n, int r) {
         if (r == 0) {
         	int value = 1;
         	 for (int i = 0; i < n; i++) {
-                 if (visited[i]) {
+                 if (check[i]) {
                      System.out.print(arr[i] + " ");
                      value = value * arr[i];
                  }
@@ -116,9 +109,9 @@ public class Spy {
         }
 
         for (int i = start; i < n; i++) {
-            visited[i] = true;
-            combination(arr, visited, i + 1, n, r - 1);
-            visited[i] = false;
+        	check[i] = true;
+            combination(arr, check, i + 1, n, r - 1);
+            check[i] = false;
         }
     }
 	
