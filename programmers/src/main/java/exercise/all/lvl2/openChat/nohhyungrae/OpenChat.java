@@ -9,8 +9,9 @@ public class OpenChat {
 	
 	public static void main(String[] args) {
 		String[] record = {"Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter uid1234 Prodo","Change uid4567 Ryan"};
+		String[] record2 = {"Enter uid0606 Gimoi", "Enter uid4567 Prodo", "Leave uid0606", "Enter uid1234 Prodo", "Change uid1234 OhYeah"};
 		
-		System.out.println("solution : "+solution(record));
+		System.out.println("solution : "+solution(record2));
     }
 	
 	public static String[] solution(String[] record) {
@@ -37,7 +38,7 @@ public class OpenChat {
 			case "Leave":
 				if(member.containsKey(row[1])) {
     				answers.put(row[1], "님이 나갔습니다.");
-					member.remove(row[1]);
+					//member.remove(row[1]);
                     result.add(answers);
 				}
 				break;
@@ -99,17 +100,17 @@ public class OpenChat {
         	for(Map.Entry<String, String> entry : result.get(i).entrySet()) {
         		if(member.containsKey(entry.getKey())) {
         			answer[size++] = member.get(entry.getKey())+entry.getValue();
-        			//System.out.println(member.get(entry.getKey())+entry.getValue());
+        			System.out.println(member.get(entry.getKey())+entry.getValue());
         		}
         	}
         }
         
         //한 문자열로 해서 치완하는 방법
-        for(Map.Entry<String, String> entry : member.entrySet()){
-        	total = total.replaceAll(entry.getKey(), entry.getValue()).trim();
-        }
-        
-        System.out.println(total);
+//        for(Map.Entry<String, String> entry : member.entrySet()){
+//        	total = total.replaceAll(entry.getKey(), entry.getValue()).trim();
+//        }
+//        
+//        System.out.println(total);
         
 //        for(Map.Entry<String, String> entry : answers.entrySet()){
 //        	System.out.println(member.get(entry.getKey()));
