@@ -1,257 +1,144 @@
 package exercise.all.lvl2.oneTwoFour.parkkwangmin;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Stack;
-import java.util.stream.Collectors;
+import java.util.Map;
+
+import org.springframework.util.StopWatch;
 
 public class OneTwoFour {
 	
+	private static StopWatch stopWatch = new StopWatch();
+	
 	public static void main(String[] args) {
 		int n = 500000000;
-		String base3 = convertToBase3(n);
-		
-		List<String> base124List = changeToBase124ByJari(base3);
-		
-		System.out.println("reduce");
-		String result = base124List.stream().reduce((el1, el2) -> sum(el1, el2)).get();
-		
-//		Stack<String> stack = new Stack<>();
-//		
-//		for (int i = base124List.size() - 1; i >= 0; i--) {
-//			stack.push(base124List.get(i));
-//		}
-//		
-//		String base124 = sumValueOfJari(stack);
-		
-		System.out.println("3진법   : " + base3);
-		System.out.println("base124 : " + result);
+		stopWatch.start("all");
+		get124(n);
+		stopWatch.stop();
+		System.out.println(stopWatch.prettyPrint());
     }
 
-	private static String convertToBase3(int numberOfBase10) {
-		System.out.println("10진법 : " + numberOfBase10);
-		BigInteger v = BigInteger.valueOf(numberOfBase10);
-		BigInteger divisor = BigInteger.valueOf(3);
-		List<String> base3List = new ArrayList<>();
+	private static String get124(int n) {
+		//stopWatch.start("convertToBase3");
+		String base3 = convertToBase3(n);
+		//stopWatch.stop();
+		//stopWatch.start("changeToBase123ByJari");
+		List<String> base123List = changeToBase123ByJari(base3);
+		//stopWatch.stop();
 		
-		while(true) {
-			BigInteger[] resDivide = v.divideAndRemainder(divisor);
+		//stopWatch.start("sum");
+		Map<Integer, Integer> base123SumByJariMap = new LinkedHashMap<>();
+		for (String base123 : base123List) {
+			String[] split = base123.split("");
+			int length = base123.length();
+			for (int jari = 1; jari <= length; jari++) {
+				int value = Integer.parseInt(split[length - jari]);
+				int existValue = base123SumByJariMap.getOrDefault(jari, 0);
+				base123SumByJariMap.put(jari, value + existValue);
+			}
+		}
+		//stopWatch.stop();
+		
+		//stopWatch.start("mapToList");
+		
+		//List<Integer> result123 = base123SumByJariMap.entrySet().stream().sorted((a, b) -> a.getKey() > b.getKey() ? 1 : -1).map(e -> e.getValue()).collect(Collectors.toList());
+		List<Integer> result123 = new ArrayList<Integer>(base123SumByJariMap.values());
+		//stopWatch.stop();
+		
+		//stopWatch.start("getResult");
+		List<String> resultBase124 = new ArrayList<>();
+		int passOveredNum = 0;
+		for (int i = 0; i < result123.size(); i++) {
+			int sum = passOveredNum + result123.get(i);
 			
-			base3List.add(resDivide[1].toString());
-			if (resDivide[0] == BigInteger.ZERO)
-				break;
+			int mok = sum / 3;
+			int namuji = sum % 3;
 			
-			v = resDivide[0];
+			passOveredNum = namuji == 0 ? mok - 1 : mok;
+			
+			resultBase124.add(String.valueOf(namuji == 0 ? 4 : namuji));
 		}
 		
-		Collections.reverse(base3List);
+		if (passOveredNum > 0) {
+			int mok = passOveredNum / 3;
+			int namuji = passOveredNum % 3;
+			
+			resultBase124.add(String.valueOf(namuji == 0 ? 4 : namuji));
+			
+			passOveredNum = namuji == 0 ? mok - 1 : mok;
+			if (passOveredNum > 0)
+				resultBase124.add(String.valueOf(passOveredNum));
+		}
 		
-		String base3 = base3List.stream().collect(Collectors.joining());
-		System.out.println("3진법 : " + base3);
+		StringBuilder builder = new StringBuilder();
+		
+		for (int i = resultBase124.size() - 1; i >= 0; i--) {
+			builder.append(resultBase124.get(i));
+		}
+		//Collections.reverse(resultBase124);
+		
+		//String result = resultBase123.stream().map(s -> "3".equals(s) ? "4" : s).collect(Collectors.joining());
+		String result = builder.toString();
+		//stopWatch.stop();
+			
+		System.out.println("base124 : " + result);
+		
+		return result;
+	}
+
+	private static String convertToBase3(int numberOfBase10) {
+		List<String> base3List = new ArrayList<>();
+		
+		int v = numberOfBase10;
+		while(true) {
+			int mok = v / 3;
+			int namuji = v % 3;
+			
+			base3List.add(String.valueOf(namuji));
+			if (mok == 0)
+				break;
+			
+			v = mok;
+		}
+		
+		StringBuilder builder = new StringBuilder();
+		int length = base3List.size();
+		for (int i = 1; i <= length; i++) {
+			builder.append(base3List.get(length - i));
+		}
+		
+//		Collections.reverse(base3List);
+		
+//		String base3 = base3List.stream().collect(Collectors.joining());
+		String base3 = builder.toString();
 		return base3;
 	}
 
-	/**
-	 * 3진법을 124진법으로 바꾼다.
-	 * 3진법의 각 자리수마다 124진법으로 바꿨을 때 규칙성이 있으므로, 3진법의 각 자리수 단위로 124진법으로 치환하는 작업을 한다. 
-	 * 12(3) -> 4(124) + 2(124)
-	 * 100022(3) -> 22224(124) + 14(124) + 2(124)
-	 * @param base3
-	 * @return
-	 * @author 박광민
-	 * @since 2021. 5. 10.
-	 */
-	private static List<String> changeToBase124ByJari(String base3) {
-		List<String> base124List = new ArrayList<>();
+	private static List<String> changeToBase123ByJari(String base3) {
+		List<String> base123List = new ArrayList<>();
 		int base3Length = base3.length();
 		for (int jari = 1; jari <= base3.length(); jari++) {
-			Integer number = Integer.valueOf(base3.substring(base3Length - jari, base3Length - jari + 1));
-			
-			if (number == 0) continue;
+			String number = base3.substring(base3Length - jari, base3Length - jari + 1);
+			if ("0".equals(number)) continue;
 			
 			if (jari == 1) {
-				if (number == 1) {
-					base124List.add("1");
-				} else if (number == 2) {
-					base124List.add("2");
-				}
+				base123List.add(number);
 				continue;
 			}
 			
-			String format = "%" + (jari - 1) + "s";
-			String numberStr = String.format(format, 4).replace(" ", "2");
+//			String format = "%" + (jari - 1) + "s";
+//			String str123 = String.format(format, "3").replace(" ", "2");
+			StringBuilder builder = new StringBuilder();
+			if ("2".equals(number)) builder.append("1");
+			for (int i = 1; i < jari - 1; i++) {
+				builder.append("2");
+			}
+			builder.append("3");
+			String str123 = builder.toString();
 			
-			if (number == 2) numberStr = "1" + numberStr;
-			base124List.add(numberStr);
+			base123List.add(str123);
 		}
-		
-		base124List.forEach(System.out::println);
-		return base124List;
+		return base123List;
 	}
-
-	private static String sum(String el1, String el2) {
-		int passOveredNumToNextJari = 0;
-		List<String> SumedUnits = new ArrayList<>();
-		int jari = 0;
-		while (true) {
-			jari++;
-			int num1 = el1.length() >= jari ? Integer.parseInt(el1.substring(el1.length() - jari, el1.length() - jari + 1)) : 0;
-			int num2 = el2.length() >= jari ? Integer.parseInt(el2.substring(el2.length() - jari, el2.length() - jari + 1)) : 0;
-			
-			if (num1 == 0 && num2 == 0) {//자릿수 모두 더한 경우 
-				if (passOveredNumToNextJari > 0) SumedUnits.add(String.valueOf(passOveredNumToNextJari));
-				break;
-			}
-			
-			String resultSumUnit = sumUnit(num1, num2);
-			String resultSumToPassOveredNum = sumUnit(Integer.valueOf(resultSumUnit.substring(1)), passOveredNumToNextJari);
-			
-			passOveredNumToNextJari = Integer.valueOf(resultSumUnit.substring(0, 1)) + Integer.valueOf(resultSumToPassOveredNum.substring(0, 1));
-			SumedUnits.add(String.valueOf(resultSumToPassOveredNum.substring(1)));
-		}
-		
-		Collections.reverse(SumedUnits);
-		
-		String sumedNum = SumedUnits.stream().collect(Collectors.joining(""));
-		
-		System.out.println("sum : " + el1 + " + " + el2);
-		System.out.println("sumedStr : " + sumedNum);
-		
-		return sumedNum;
-	}
-
-	/**
-	 * 두 숫자(124진법 수)를 더한다.
-	 * @param num1
-	 * @param num2
-	 * @return sumedValue 덧셈 결과값 ex) 1 + 1 => 인 02, 2 + 4 => 12
-	 * @author 박광민
-	 * @since 2021. 5. 10.
-	 */
-	private static String sumUnit(int num1, int num2) {
-		if (num1 == 0 || num2 == 0) {
-			return "0" + (num1 + num2);
-		}
-		
-		int sumedNum = num1 + num2;
-		if (sumedNum == 2) {//1 + 1
-			return "02";
-		} else if (sumedNum == 3) {//1 + 2
-			return "04";
-		} else if (sumedNum == 4) {//2 + 2
-			return "11";
-		} else if (sumedNum == 5) {//1 + 4
-			return "11";
-		} else if (sumedNum == 6) {//2 + 4
-			return "12";
-		} else if (sumedNum == 8) {//4 + 4
-			return "14";
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
-
-	private static String sumValueOfJari(Stack<String> base124List) {
-		String base124 = null;
-		while(true) {
-			if (base124List.isEmpty()) break;
-			
-			if (base124List.size() == 1) {
-				base124 = base124List.pop();
-				break;
-			}
-			
-			String pop1 = base124List.pop();
-			String pop2 = base124List.pop();
-			
-			int longerLength = pop1.length() >= pop2.length() ? pop1.length() : pop2.length();
-			if (pop1.length() != longerLength) {
-				pop1 = String.format("%" + longerLength + "s", pop1).replace(" ", "0");
-			}
-			if (pop2.length() != longerLength) {
-				pop2 = String.format("%" + longerLength + "s", pop1).replace(" ", "0");
-			}
-			
-			List<String> sumList = new ArrayList<>();
-			int passedNum = 0;
-			for (int i = longerLength - 1; i >= -1; i--) {
-				if (i == -1) {
-					if (passedNum == 0) break;
-					
-					sumList.add(String.valueOf(passedNum));
-					break;
-				}
-				
-				int aPop1Num = Integer.parseInt(pop1.substring(i, i + 1));
-				int aPop2Num = Integer.parseInt(pop2.substring(i, i + 1));
-				
-				int thisPasswdNum = 0;
-				int thisNum = 0;
-				if (aPop1Num == 0 || aPop2Num == 0) {
-					thisNum = aPop1Num + aPop2Num;
-				} else {
-					int popSumed = aPop1Num + aPop2Num;
-					
-					if (popSumed == 2) {
-						thisNum = 2;
-					} else if (popSumed == 3) {
-						thisNum = 4;
-					} else if (popSumed == 4) {
-						thisNum = 1;
-						thisPasswdNum = 1;
-					} else if (popSumed == 5) {
-						thisNum = 1;
-						thisPasswdNum = 1;
-					} else if (popSumed == 6) {
-						thisNum = 2;
-						thisPasswdNum = 1;
-					} else if (popSumed == 8) {
-						thisNum = 4;
-						thisPasswdNum = 1;
-					}
-				}
-				
-				if (passedNum == 0) {
-					passedNum = thisPasswdNum;
-					sumList.add(String.valueOf(thisNum));
-					continue;
-				}
-				
-				int passedSumd = thisNum + passedNum;
-				
-				if (passedSumd == 2) {
-					thisNum = 2;
-				} else if (passedSumd == 3) {
-					thisNum = 4;
-				} else if (passedSumd == 4) {
-					thisNum = 1;
-					thisPasswdNum += 1;
-				} else if (passedSumd == 5) {
-					thisNum = 1;
-					thisPasswdNum += 1;
-				} else if (passedSumd == 6) {
-					thisNum = 2;
-					thisPasswdNum += 1;
-				} else if (passedSumd == 8) {
-					thisNum = 4;
-					thisPasswdNum += 1;
-				}
-				
-				passedNum = thisPasswdNum;
-				sumList.add(String.valueOf(thisNum));
-			}
-			
-			Collections.reverse(sumList);
-			
-			String sumedStr = sumList.stream().collect(Collectors.joining(""));
-			System.out.println("sum : " + pop1 + " + " + pop2);
-			System.out.println("sumedStr : " + sumedStr);
-			
-			base124List.push(sumedStr);
-		}
-		return base124;
-	}
-
 }
