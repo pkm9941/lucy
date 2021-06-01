@@ -12,7 +12,7 @@ public class PairRemove {
 		System.out.println(answer);
     }
 
-	private static int removePairs(String s) {
+	public static int removePairs(String s) {
 		if (s == null) {
 			return 1;
 		} else if (s.length() == 1) {

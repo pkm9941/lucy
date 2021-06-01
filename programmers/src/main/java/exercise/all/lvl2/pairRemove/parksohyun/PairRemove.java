@@ -10,7 +10,7 @@ public class PairRemove {
 		System.out.println(result);
     }
 
-	private static int solution(String s) {
+	public static int solution(String s) {
 	   ArrayList<Character> aList = new ArrayList<Character>();
  	   
 	   for(int i = 0; i < s.length(); i++){
