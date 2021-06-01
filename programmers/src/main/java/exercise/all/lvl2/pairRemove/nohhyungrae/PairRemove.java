@@ -7,41 +7,58 @@ import java.util.Stack;
 
 public class PairRemove {
 	
+	
+	
 	public static void main(String[] args) {
-		String s = "baaasewrdbsadfbwerrbaaasd";
-		System.out.println("solution : "+solution(s));
+		
+		StringBuffer a1 = new StringBuffer();
+		
+		String s = "baaasewrdbsadfbwerrbaaasasdfasdcvdbnfghkmkjlrtysertadsefasdsabncvbnrnwsaertawewzsdfqewrwafxzcvddqwer";
+		
+		for(int i=0;i<500000;i++) {
+			a1.append(s);
+		}
+		
+		String str = a1.toString();
+		System.out.println(str.length());
+		
+		long a = System.currentTimeMillis();
+		System.out.println("solution : "+solution(str));
+		long e = System.currentTimeMillis();
+		System.out.println("e-a "+(e-a)/1000);
     }
 
 	public static int solution(String s){
-        Queue<Character> c = new LinkedList<>();
-        Stack<Character> que = new Stack<>();
-        s.chars().forEach(a->c.add((char) a));
+        Queue<Character> que = new LinkedList<>();
+        Stack<Character> stack = new Stack<>();
+        long b = System.currentTimeMillis();
+        s.chars().forEach(a->que.add((char) a));
+        long c = System.currentTimeMillis();
+        System.out.println("c-b "+(c-b)/1000);
+        while(!que.isEmpty()) {
 
-        while(!c.isEmpty()) {
+            if(stack.isEmpty()) {
+            	stack.add(que.poll());
+            }else if(stack.peek().equals(que.peek())){
+            	stack.pop();
+            	que.poll();
+            }else if(!stack.peek().equals(que.peek())) {
+            	stack.add(que.poll());
+            }   
 
-            for(int i=0; i<c.size(); i++) {
-
-                if(que.isEmpty()) {
-                    que.add(c.poll());
-                }else if(que.peek().equals(c.peek())){
-                    que.pop();
-                    c.poll();
-                }else if(!que.peek().equals(c.peek())) {
-                    que.add(c.poll());
-                }   
-
-            }
-
-            if(s.length() < 2 || que.size() > (s.length()/2)) break;
+            if(s.length() < 2 || stack.size() > (s.length()/2)) break;
 
         }
-
-        return que.size() == 0 ? 1 : 0;
+        long d = System.currentTimeMillis();
+        System.out.println("d-c "+(d-c)/1000);
+        return stack.size() == 0 ? 1 : 0;
     }
+	
+
 
 //---------------------------------------------------------------------------
 	
-//  Queue<Character> c = new LinkedList<>();
+//  LIST<Character> c = new LinkedList<>();
 //  s.chars().forEach(a->c.add((char) a));
 //
 //  System.out.println("c : "+c);
@@ -57,12 +74,12 @@ public class PairRemove {
 ////				break;
 ////			}
 //			
-////  		if(s.charAt(i) == s.charAt(i+1)) {
-////				s = s.replace(s.substring(i, i+2), "");
-////			}else if(i == s.length()-2) {
-////				answer = s.length();
-////				break;
-////			}
+//  		if(s.charAt(i) == s.charAt(i+1)) {
+//				s = s.replace(s.substring(i, i+2), "");
+//			}else if(i == s.length()-2) {
+//				answer = s.length();
+//				break;
+//			}
 //			
 //			
 //		}
