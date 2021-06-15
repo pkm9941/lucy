@@ -29,9 +29,9 @@ public class NewsClustering {
 	
 	public static int solution(String str1, String str2) {
         int answer = 65536;
-        double tot = 0;
-        List<String> 합집합 = new ArrayList<String>();
-        List<String> 교집합 = new ArrayList<String>();
+        double result = 0;
+        List<String> tot = new ArrayList<String>();
+        List<String> dif = new ArrayList<String>();
         
         List<String> str1List = new ArrayList<String>();
         List<String> str2List = new ArrayList<String>();
@@ -88,38 +88,38 @@ public class NewsClustering {
             if(str2List.contains(hap)) {
             	str2List.remove(hap);
             }
-            합집합.add(hap);
+            tot.add(hap);
         }
-        합집합.addAll(str2List);
+        tot.addAll(str2List);
         
         //교집합 구하기
         for(String cha : str1List) {
             if(str2List2.contains(cha)) {
-                교집합.add(cha);
+                dif.add(cha);
                 str2List2.remove(cha);
             }
         }
         
         System.out.println("str1List : "+str1List);
         System.out.println("str2List : "+str2List);
-    	System.out.println("합집합 : "+합집합);
-    	System.out.println("교집합 : "+교집합);
+    	System.out.println("tot : "+tot);
+    	System.out.println("dif : "+dif);
     	
     	
-        if(합집합.size() == 1) {
-        	tot = (double) str1List.size()/ (double)str2List.size();
+        if(tot.size() == 1) {
+        	result = (double) str1List.size()/ (double)str2List.size();
         }else {
-        	tot = (double) 교집합.size()/ (double)합집합.size();
+        	result = (double) dif.size()/ (double)tot.size();
         }
-    	System.out.println("합집합 : "+합집합.size()+" , 교집합 : "+교집합.size()+" , tot : "+tot);
-    	return (int)(answer * tot);
+    	System.out.println("tot : "+tot.size()+" , dif : "+dif.size()+" , result : "+result);
+    	return (int)(answer * result);
         
     }
 	
 	public static int solution3(String str1, String str2) {
 		int answer = 65536;
-		List<String> 합집합 = new ArrayList<String>();
-		List<String> 교집합 = new ArrayList<String>();
+		List<String> tot = new ArrayList<String>();
+		List<String> dif = new ArrayList<String>();
 		
 		List<String> string1 = new ArrayList<String>();
 		List<String> string2 = new ArrayList<String>();
@@ -182,26 +182,26 @@ public class NewsClustering {
 		if(string1.size() > string2.size()) {
 			for(String cha : string2) {
 				if(string2.contains(cha)) {
-					합집합.add(cha);
+					tot.add(cha);
 					string2.remove(cha);
 				}
-				교집합.add(cha);
+				dif.add(cha);
 				string22.remove(cha);
 			}
-			교집합.addAll(string1);
-			합집합.retainAll(string11);
+			dif.addAll(string1);
+			tot.retainAll(string11);
 			
 		}else {
 			for(String cha : string1) {
 				if(string2.contains(cha)) {
 					string2.remove(cha);
-					합집합.add(cha);
+					tot.add(cha);
 				}
-				교집합.add(cha);
+				dif.add(cha);
 				string11.remove(cha);
 			}
-			교집합.addAll(string2);
-			합집합.retainAll(string22);
+			dif.addAll(string2);
+			tot.retainAll(string22);
 			
 		}
 		
@@ -218,11 +218,11 @@ public class NewsClustering {
 //        			//if(string1.matches("[A-Z][A-Z]") && string2.matches("[A-Z][A-Z]")) {
 //        				System.out.println("string1 : "+string1.get(i)+" , string2 : "+string2.get(i) );
 //        				if(string1.get(i).equals(string2.get(i))) {
-//        					합집합.add(string1.get(i));
-//        					교집합.add(string1.get(i));
+//        					tot.add(string1.get(i));
+//        					dif.add(string1.get(i));
 //        				}else {
-//        					교집합.add(string1.get(i));
-//        					교집합.add(string2.get(i));
+//        					dif.add(string1.get(i));
+//        					dif.add(string2.get(i));
 //        				}
 //        			//}
 //        		}
@@ -232,48 +232,48 @@ public class NewsClustering {
 //        			//if(string1.matches("[A-Z][A-Z]") && string2.matches("[A-Z][A-Z]")) {
 //        				System.out.println("string1 : "+string1.get(i)+" , string2 : "+string2.get(i) );
 //        				if(string1.get(i).equals(string2.get(i))) {
-//        					합집합.add(string1.get(i));
-//        					교집합.add(string1.get(i));
+//        					tot.add(string1.get(i));
+//        					dif.add(string1.get(i));
 //        				}else {
-//        					교집합.add(string1.get(i));
-//        					교집합.add(string2.get(i));
+//        					dif.add(string1.get(i));
+//        					dif.add(string2.get(i));
 //        				}
 //        			//}
 //        		}
 //        	}
 //        	
 //        	
-//        	System.out.println(합집합);
-//        	System.out.println(교집합);
+//        	System.out.println(tot);
+//        	System.out.println(dif);
 //             
-//        	double tot = (double) 합집합.size()/ (double)교집합.size();
-//        	System.out.println("합집합 : "+합집합.size()+" , 교집합 : "+교집합.size()+" , tot : "+tot);
-//        	return (int)(answer * tot);
+//        	double result = (double) tot.size()/ (double)dif.size();
+//        	System.out.println("tot : "+tot.size()+" , dif : "+dif.size()+" , result : "+result);
+//        	return (int)(answer * result);
 //        }
 		
 		System.out.println("string1 : "+string1);
 		System.out.println("string11 : "+string11);
 		System.out.println("string2 : "+string2);
 		System.out.println("string22 : "+string22);
-		System.out.println("합집합 : "+합집합);
-		System.out.println("교집합 : "+교집합);
-		double tot;
-		if(합집합.size() == 1) {
-			tot = (double) string1.size()/ (double)string2.size();
+		System.out.println("tot : "+tot);
+		System.out.println("dif : "+dif);
+		double result;
+		if(tot.size() == 1) {
+			result = (double) string1.size()/ (double)string2.size();
 		}else {
-			tot = (double) 합집합.size()/ (double)교집합.size();
+			result = (double) tot.size()/ (double)dif.size();
 		}
-//    	double tot = (double) 합집합.size()/ (double)교집합.size();
-		System.out.println("합집합 : "+합집합.size()+" , 교집합 : "+교집합.size()+" , tot : "+tot);
-		System.out.println(3/2*tot);
-		return (int)(answer * tot);
+//    	double result = (double) tot.size()/ (double)dif.size();
+		System.out.println("tot : "+tot.size()+" , dif : "+dif.size()+" , result : "+result);
+		System.out.println(3/2*result);
+		return (int)(answer * result);
 		
 	}
 	
 	public static int solution2(String str1, String str2) {
 		int answer = 65536;
-		List<String> 합집합 = new ArrayList<String>();
-		List<String> 교집합 = new ArrayList<String>();
+		List<String> tot = new ArrayList<String>();
+		List<String> dif = new ArrayList<String>();
 		
 		str1 = str1.toUpperCase();
 		str2 = str2.toUpperCase();
@@ -287,25 +287,25 @@ public class NewsClustering {
 			if(string1.matches("[A-Z][A-Z]") && string2.matches("[A-Z][A-Z]")) {
 				System.out.println("string1 : "+string1+" , string2 : "+string2 );
 				if(string1.equals(string2)) {
-					합집합.add(string1);
-					교집합.add(string1);
+					tot.add(string1);
+					dif.add(string1);
 				}else {
-					교집합.add(string1);
-					교집합.add(string2);
+					dif.add(string1);
+					dif.add(string2);
 				}
 			}
 		}
-		Collections.sort(합집합);
-		Collections.sort(교집합);
+		Collections.sort(tot);
+		Collections.sort(dif);
 		
-		if(합집합.equals(교집합)) {
+		if(tot.equals(dif)) {
 			return 1*answer;
 		}else {
-			System.out.println(교집합);
+			System.out.println(dif);
 			
-			double tot = (double) 합집합.size()/ (double)교집합.size();
-			System.out.println("합집합 : "+합집합.size()+" , 교집합 : "+교집합.size()+" , tot : "+tot);
-			return (int)(answer * tot);
+			double result = (double) tot.size()/ (double)dif.size();
+			System.out.println("tot : "+tot.size()+" , dif : "+dif.size()+" , result : "+result);
+			return (int)(answer * result);
 		}
 		
 	}
