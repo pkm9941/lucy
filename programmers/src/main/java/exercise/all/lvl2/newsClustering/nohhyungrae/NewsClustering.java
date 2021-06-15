@@ -24,12 +24,12 @@ public class NewsClustering {
 //		String str1 = "E=M*C^2";
 //		String str2 = "e=m*c^2";
 		
-		
 		System.out.println("solution : "+solution(str1, str2));
 	}
 	
 	public static int solution(String str1, String str2) {
         int answer = 65536;
+        double tot = 0;
         List<String> same = new ArrayList<String>();
         List<String> dif = new ArrayList<String>();
         
@@ -42,6 +42,7 @@ public class NewsClustering {
         System.out.println(str1);
         System.out.println(str2);
         
+        //리스트에 정리
         if(str1.length() == str2.length()) {
 			for(int i=0; i<str1.length()-1; i++) {
 				if(Pattern.matches("^[a-zA-Z]*$", str1) && Pattern.matches("^[a-zA-Z]*$", str2) ) {
@@ -78,68 +79,39 @@ public class NewsClustering {
         Collections.sort(str2List);
         Collections.sort(str2List2);
 
+        //예외처리
         if(str1List.equals(str2List)) return 1*answer;
 
 
         //합집합 구하기
-        for(String str : str1List) {
-            if(str2List.contains(str)) {
-            	str2List.remove(str);
+        for(String hap : str1List) {
+            if(str2List.contains(hap)) {
+            	str2List.remove(hap);
             }
-            same.add(str);
+            same.add(hap);
         }
         same.addAll(str2List);
         
         //교집합 구하기
-        for(String str : str1List) {
-            if(str2List2.contains(str)) {
-                dif.add(str);
-                str2List2.remove(str);
+        for(String cha : str1List) {
+            if(str2List2.contains(cha)) {
+                dif.add(cha);
+                str2List2.remove(cha);
             }
         }
-
-        
-//        if(str1List.size() > str2List.size()) {
-//        	same.addAll(str1List);
-//        	for(int i=0; i<str2List.size(); i++) {
-//        		if(same.get(i).contains(mapTwo.get(i))) {
-//        			dif.add(mapTwo.get(i));
-//        			mapOne.remove(i);
-//        			mapTwo.remove(i);
-//        		}else {
-//        			same.add(mapTwo.get(i));
-//        			mapTwo.remove(i);
-//        		}
-//            }
-//        }else {
-//        	same.addAll(str2List);
-//        	for(int i=0; i<str1List.size(); i++) {
-//        		if(same.get(i).contains(mapOne.get(i))) {
-//        			dif.add(mapTwo.get(i));
-//        			mapTwo.remove(i);
-//        			mapOne.remove(i);
-//        		}else {
-//        			same.add(mapTwo.get(i));
-//        			mapOne.remove(i);
-//        		}
-//            }
-//        }
-        
-
         
         System.out.println("str1List : "+str1List);
         System.out.println("str2List : "+str2List);
     	System.out.println("same : "+same);
     	System.out.println("dif : "+dif);
     	
-    	double tot = 0;
+    	
         if(same.size() == 1) {
         	tot = (double) str1List.size()/ (double)str2List.size();
         }else {
         	tot = (double) dif.size()/ (double)same.size();
         }
     	System.out.println("same : "+same.size()+" , dif : "+dif.size()+" , tot : "+tot);
-    	System.out.println(3/2*tot);
     	return (int)(answer * tot);
         
     }
