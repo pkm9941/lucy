@@ -1,6 +1,10 @@
 package exercise.all.lvl2.newsClustering.parksohyun;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class NewsClustering {
 	/*
@@ -12,29 +16,28 @@ public class NewsClustering {
 	 */
 	public static void main(String[] args) {
 		String str1 = "handshake";
-		String str2 = "shake hands";
-		
+		String str2 = "shake hands";		
 		solution(str1,str2);		
 	}
 
-	private static void solution(String str1, String str2) {
-		
+	private static int solution(String str1, String str2) {
+		int answer = 0;
 		ArrayList<String> aList = new ArrayList<String>();
 		ArrayList<String> bList = new ArrayList<String>();
-		ArrayList<String> abIntersectList = new ArrayList<String>(); //교집합
+     	ArrayList<String> abIntersectList = new ArrayList<String>(); //교집합
 		ArrayList<String> abList = new ArrayList<String>(); 				//합집합
 
 		for (int i = 0; i < str1.length() - 1; i++) {  	
 			//알파벳인지 체크
 			if(str1.substring(i, i + 1).matches(".*[a-z|A-Z]+.*") && str1.substring(i+1, i + 2).matches(".*[a-z|A-Z]+.*")) {
-				aList.add(str1.substring(i, i + 2));
+				aList.add(str1.substring(i, i + 2).toLowerCase());
 			}
 		}
 		
 		for(int i=0; i < str2.length()-1; i++) {
 			//알파벳인지 체크
 			if(str2.substring(i, i + 1).matches(".*[a-z|A-Z]+.*") && str2.substring(i+1, i + 2).matches(".*[a-z|A-Z]+.*")) {
-				bList.add(str2.substring(i, i + 2));
+				bList.add(str2.substring(i, i + 2).toLowerCase());
 			}
 		}
 
@@ -46,17 +49,62 @@ public class NewsClustering {
 			}
 		}
 		
+	
+		
 		//합집합 만들기
 		abList.addAll(aList);
 		abList.addAll(bList);	
 		abList.removeAll(abIntersectList);
-		abList.addAll(abIntersectList);
+		//abList.addAll(abIntersectList);
 		
+		Map<String, Integer> map = new HashMap<>();
+		Map<String, Integer> map2 = new HashMap<>();
+		Map<String, Integer> map3 = new HashMap<>();
+		
+		for(int i=0;i<aList.size();i++) {
+			if(abIntersectList.contains(aList.get(i))) {
+				map.put(aList.get(i),Collections.frequency(aList, aList.get(i)));
+			}
+		}
+		
+		for(int i=0;i<bList.size();i++) {
+			if(abIntersectList.contains(bList.get(i))) {
+				map2.put(bList.get(i),Collections.frequency(bList, bList.get(i)));
+			}
+		}
+		
+		Set<String> aKeys = map.keySet();
+		Set<String> bKeys = map2.keySet();
+		Set<String> cKeys = map3.keySet();
+		
+		if(bKeys.equals(aKeys)) {
+			for(String key: bKeys) {
+			   if(map.get(key)>map2.get(key)) {		   
+				   map3.put(key, map.get(key));
+				}else {
+					 map3.put(key, map2.get(key));
+				}
+			}			
+		}
+		
+	double unionNum = abList.size();
+		
+ 
+    for(String key: cKeys) {
+    	  unionNum += map3.get(key);
+      }
+    
 		double intesectNum= abIntersectList.size();
-		double unionNum = abList.size();
+
 		double value = intesectNum / unionNum;
-		int valueR =(int)(value * 65536);
-		System.out.println(valueR);	
+		
+		if(bList.size()==0 && aList.size()==0) {
+			value=1;
+		}	
+
+		answer =(int)(value * 65536);
+		System.out.println(answer);
+		return answer;	
 		
 	}
 
