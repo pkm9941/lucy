@@ -32,7 +32,6 @@ public class NewsClustering {
         double result = 0;
         List<String> tot = new ArrayList<String>();
         List<String> dif = new ArrayList<String>();
-        
         List<String> str1List = new ArrayList<String>();
         List<String> str2List = new ArrayList<String>();
         List<String> str2List2 = new ArrayList<String>();
