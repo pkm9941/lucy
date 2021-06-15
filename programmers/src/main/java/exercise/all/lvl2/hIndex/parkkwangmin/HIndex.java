@@ -1,11 +1,17 @@
 package exercise.all.lvl2.hIndex.parkkwangmin;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class HIndex {
 	
-	private int[] citations;
+	private int[] originCitations;
+	private Integer[] citations;
 	
 	public HIndex(int[] citations) {
-		this.citations = citations;
+		this.originCitations = citations;
+		this.citations = Arrays.stream(originCitations).boxed().sorted((a, b) -> a > b ? -1 : 1).toArray(Integer[]::new);
+		Arrays.sort(citations);
 	}
 
 	public static void main(String[] args) {
@@ -19,6 +25,10 @@ public class HIndex {
 	protected Integer getHIndexOfAPaper(int citation) {
 		if (citation > citations.length) return 0;
 		return 1;
+	}
+
+	public Integer[] getcitations() {
+		return citations;
 	}
 
 }
