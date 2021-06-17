@@ -65,8 +65,8 @@ public class HIndexNormal {
 		
 		int reversedCitationsSize = reversedCitations.size();
 		int currIndex = 0;
+		int paperCntOfTheCitation = 0;
 		for (int citation = maxCitation; citation > 0; citation--) {
-			int paperCntOfTheCitation = 0;
 			for (int i = currIndex; i < reversedCitationsSize; i++) {
 				if (reversedCitations.get(i) < citation) {
 					currIndex = i;
@@ -89,8 +89,8 @@ public class HIndexNormal {
 		
 		int reversedCitationsSize = reversedCitations.length;
 		int currIndex = 0;
+		int paperCntOfTheCitation = 0;
 		for (int citation = maxCitation; citation > 0; citation--) {
-			int paperCntOfTheCitation = 0;
 			for (int i = currIndex; i < reversedCitationsSize; i++) {
 				if (reversedCitations[i] < citation) {
 					currIndex = i;
@@ -114,8 +114,8 @@ public class HIndexNormal {
 		
 		int reversedCitationsSize = reversedCitations.length;
 		int currIndex = 0;
+		int paperCntOfTheCitation = 0;
 		for (int citation = maxCitation; citation > 0; citation--) {
-			int paperCntOfTheCitation = 0;
 			for (int i = currIndex; i < reversedCitationsSize; i++) {
 				if (reversedCitations[i] < citation) {
 					currIndex = i;
