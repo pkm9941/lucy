@@ -17,15 +17,15 @@ public class Carpet {
 	
 	public static int[] solution(int brown, int yellow) {
         int[] answer = new int[2];
-        int tot = brown + yellow;
+        int sum = brown + yellow;
         
-        for(int i=1;i<=tot/2; i++) {
-        	int f = tot/i;
-        	if(i >=3 && f >= i && f*i == tot) {
-        		System.out.println((f*2)+((i-2)*2));
-        		if((f*2)+((i-2)*2)== brown) {
-        			answer[0] = f;
-        			answer[1] = i;
+        for(int width=1;width<=sum/2; width++) {
+        	int len = sum/width;
+        	if(width >=3 && len >= width && len*width == sum) {
+        		System.out.println((len*2)+((width-2)*2));
+        		if((len*2)+((width-2)*2)== brown) {
+        			answer[0] = len;
+        			answer[1] = width;
         		}
         	}
         }
@@ -33,5 +33,24 @@ public class Carpet {
         
         return answer;
     }
+	
+	public static int[] solution2(int brown, int yellow) {
+		int[] answer = new int[2];
+		int tot = brown + yellow;
+		
+		for(int i=1;i<=tot/2; i++) {
+			int f = tot/i;
+			if(i >=3 && f >= i && f*i == tot) {
+				System.out.println((f*2)+((i-2)*2));
+				if((f*2)+((i-2)*2)== brown) {
+					answer[0] = f;
+					answer[1] = i;
+				}
+			}
+		}
+		
+		
+		return answer;
+	}
 
 }
