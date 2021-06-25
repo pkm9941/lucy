@@ -33,24 +33,5 @@ public class Carpet {
         
         return answer;
     }
-	
-	public static int[] solution2(int brown, int yellow) {
-		int[] answer = new int[2];
-		int tot = brown + yellow;
-		
-		for(int i=1;i<=tot/2; i++) {
-			int f = tot/i;
-			if(i >=3 && f >= i && f*i == tot) {
-				System.out.println((f*2)+((i-2)*2));
-				if((f*2)+((i-2)*2)== brown) {
-					answer[0] = f;
-					answer[1] = i;
-				}
-			}
-		}
-		
-		
-		return answer;
-	}
 
 }
