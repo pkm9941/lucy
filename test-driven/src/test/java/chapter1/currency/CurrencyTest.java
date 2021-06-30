@@ -20,9 +20,9 @@ import org.junit.jupiter.api.Test;
  * hashcode
  * equals null
  * equals object
- * * 5CHF * 2 = 10CHF <--
+ * 5CHF * 2 = 10CHF <--
  * Dollar/Franc 중복
- * 공용 equals
+ * * 공용 equals <--
  * 공용 times
  * 
  * @author 박광민
@@ -64,6 +64,8 @@ class CurrencyTest {
 	void testEquality() {
 		assertTrue(new Dollar(5).equals(new Dollar(5)));
 		assertFalse(new Dollar(5).equals(new Dollar(6)));
+		assertTrue(new Franc(5).equals(new Franc(5)));
+		assertFalse(new Franc(5).equals(new Franc(6)));
 	}
 	
 }
