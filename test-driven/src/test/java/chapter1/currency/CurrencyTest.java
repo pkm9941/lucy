@@ -13,11 +13,13 @@ import org.junit.jupiter.api.Test;
 /**
  * 5$ x 2 = 10$ <---
  * 5$ + 10USD = 10$ ($ : USD = 1 : 2)
- * amount를 private으로 만들기
+ * * amount를 private으로 만들기 <--
  * Dollar 부작용(side effect?) <---
  * Money 반올림?
- * * equals <--
+ * equals <--
  * hashcode
+ * equals null
+ * equals object
  * 
  * @author 박광민
  * @since 2021. 6. 24.
@@ -43,11 +45,8 @@ class CurrencyTest {
 	@Test
 	void testMultiplication() {
 		Dollar five = new Dollar(5);
-		Dollar product = five.times(2);
-		assertEquals(10, product.amount);
-		
-		product = five.times(3);
-		assertEquals(15, product.amount);
+		assertEquals(new Dollar(10), five.times(2));
+		assertEquals(new Dollar(15), five.times(3));
 	}
 	
 	@Test
