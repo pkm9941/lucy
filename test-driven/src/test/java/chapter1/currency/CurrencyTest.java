@@ -22,8 +22,9 @@ import org.junit.jupiter.api.Test;
  * equals object
  * 5CHF * 2 = 10CHF <--
  * Dollar/Franc 중복
- * * 공용 equals <--
+ * 공용 equals <--
  * 공용 times
+ * * Franc와 Dollar 비교하기 <--
  * 
  * @author 박광민
  * @since 2021. 6. 24.
@@ -66,6 +67,7 @@ class CurrencyTest {
 		assertFalse(new Dollar(5).equals(new Dollar(6)));
 		assertTrue(new Franc(5).equals(new Franc(5)));
 		assertFalse(new Franc(5).equals(new Franc(6)));
+		assertFalse(new Dollar(5).equals(new Franc(5)));
 	}
 	
 }
