@@ -24,8 +24,8 @@ import org.junit.jupiter.api.Test;
  * Dollar/Franc 중복
  * 공용 equals <--
  * 공용 times
- * * Franc와 Dollar 비교하기 <--
- * 통화
+ * Franc와 Dollar 비교하기 <--
+ * * 통화 <--
  * testFrancMultiplication 지워야 할까?
  * 
  * @author 박광민
@@ -72,4 +72,9 @@ class CurrencyTest {
 		assertFalse(Money.dollar(5).equals(Money.franc(5)));
 	}
 	
+	@Test
+	void testCurrency() {
+		assertEquals("USD", Money.dollar(5).currency());
+		assertEquals("CHF", Money.franc(5).currency());
+	}
 }
