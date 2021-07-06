@@ -6,7 +6,7 @@ import java.util.Collections;
 public class TelNoList {
 
 	public static void main(String[] args) {
-		String[] phone_book1 = {"119", "97674223", "195524421","123","456","789","12","123","1235","567","88"};
+		String[] phone_book1 = {"119","","", "97674223", "195524421","123","456","789","12","123","1235","567","88"};
 		String[] phone_book2 = {"123","456","789"};
 		String[] phone_book3 = {"12","123","1235","567","88"};
 		
@@ -25,6 +25,12 @@ public class TelNoList {
         
     	System.out.println("first : "+first);
         for(int i=1; i< phone_book.length; i++) {
+        	
+        	if("".equals(first)) {
+        		first = phone_book[i];
+        		continue;
+        	}
+        	
         	if(first.length() <= phone_book[i].length()) {
         		subStr = phone_book[i].substring(0, first.length());
         	}else {
@@ -32,6 +38,7 @@ public class TelNoList {
         	}
         	
         	if(first.equals(subStr)) {
+        		System.out.println("first : "+first+" , next : "+phone_book[i] );
     			return false;
     		}else {
     			first = phone_book[i];
