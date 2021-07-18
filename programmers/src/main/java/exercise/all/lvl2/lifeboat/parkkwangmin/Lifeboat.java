@@ -18,8 +18,12 @@ public class Lifeboat {
 	public static void main(String[] args) {
 		Lifeboat lifeboat = new Lifeboat();
 		//int[] people = {70, 50, 80, 50};
-		int[] people = {70, 80, 50};
-		int limit = 100;
+		//int[] people = {70, 80, 50};
+		int[] people = new int[50000];
+		for (int i = 0; i < 50000; i++) {
+			people[i] = (int)Math.round(Double.valueOf(Math.random() * 200)) + 40;
+		}
+		int limit = 240;
 		int answer = lifeboat.countBoat(people, limit);
 		System.out.println(answer);
 	}
@@ -29,14 +33,24 @@ public class Lifeboat {
 		if (peopleArray.length == 1)
 			return 1;
 		
-		List<Integer> sortedPeople = Arrays.stream(peopleArray).boxed()
-											.sorted().collect(Collectors.toCollection(LinkedList::new));
+		Arrays.sort(peopleArray);
+		List<Integer> sortedPeople = new LinkedList<>();
+		for (int person : peopleArray) {
+			sortedPeople.add(person);
+		}
+//		List<Integer> sortedPeople = Arrays.stream(peopleArray).boxed()
+//											.sorted().collect(Collectors.toCollection(LinkedList::new));
 		
 		int boats = 0;
-		
+		int halfLimit = limit/2;
 		int lightestWeight = sortedPeople.remove(0);
 		int heaviestWeight = sortedPeople.remove(sortedPeople.size() - 1);
 		while(true) {
+			if (lightestWeight > halfLimit) {
+				boats += 2 + sortedPeople.size();
+				break;
+			}
+			
 			if (lightestWeight + heaviestWeight > limit) {
 				boats++;//뚱뚱한 사람 보트 태우기
 				if (!sortedPeople.isEmpty()) {
