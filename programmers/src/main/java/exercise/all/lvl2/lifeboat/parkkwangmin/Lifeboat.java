@@ -3,13 +3,12 @@ package exercise.all.lvl2.lifeboat.parkkwangmin;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 순서가 있는 조합 -> 하나씩 실행
  * 두명씩 짝을 지을 수 있는 경우의 수 -> 100
  * 몸무게순으로 정렬 -> 가장 가벼운 사람부터 시작 -> 두 사람의 몸무게의 합이 100에 가장 가까운 사람을 택함
- * 
+ *  
  * @author 박광민
  * @since 2021. 7. 19.
  */
