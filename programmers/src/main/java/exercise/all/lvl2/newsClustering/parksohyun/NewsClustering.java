@@ -16,8 +16,10 @@ public class NewsClustering {
 	 */
 	public static void main(String[] args) {
 		String str1 = "handshake";
+		
 		String str2 = "shake hands";		
 		solution(str1,str2);		
+	
 	}
 
 	private static int solution(String str1, String str2) {
@@ -49,7 +51,6 @@ public class NewsClustering {
 			}
 		}
 		
-	
 		
 		//합집합 만들기
 		abList.addAll(aList);
@@ -77,6 +78,7 @@ public class NewsClustering {
 		Set<String> bKeys = map2.keySet();
 		Set<String> cKeys = map3.keySet();
 		
+		//더 큰 값 
 		if(bKeys.equals(aKeys)) {
 			for(String key: bKeys) {
 			   if(map.get(key)>map2.get(key)) {		   
@@ -95,7 +97,6 @@ public class NewsClustering {
       }
     
 		double intesectNum= abIntersectList.size();
-
 		double value = intesectNum / unionNum;
 		
 		if(bList.size()==0 && aList.size()==0) {
