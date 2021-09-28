@@ -25,7 +25,7 @@ public class CraneGame {
 	static String exit = "EXIT";
 	
 	public static void main(String[] args) {
-		//start();
+		start();
 		
 		int[][] boards = {
 				 
@@ -36,9 +36,9 @@ public class CraneGame {
 		         {3,5,1,3,1}
 		};
 		
-		int [] moves = {1,5,3,5,1,2,1,4};
+		int[] moves = {1,5,3,5,1,2,1,4};
 		
-		System.out.println("solution() : "+ solution(boards, moves));
+		System.out.println("result : "+ solution(boards, moves));
 	}
 	
 	public static void map(int x) {
@@ -47,7 +47,7 @@ public class CraneGame {
 			for (int j = 0; j < board[i].length; j++) {
 
 				if (i == 0 && j == x) {
-					System.out.print("㉿\t");
+					System.out.print("㈜\t");
 				} else if (board[i][j] == 0) {
 					System.out.print("□\t");
 				} else if (board[i][j] == 9) {
@@ -111,7 +111,7 @@ public class CraneGame {
 		}
 	}
 	
-	public static int picker(int x) {
+	static int picker(int x) {
 		int item = 0;
 		for(int i=1;i<board.length-1; i++) {
 			if(board[i][x] != 0) {
@@ -129,7 +129,7 @@ public class CraneGame {
 		return item;
 	}
 	
-	public static void checkBasket(int picItem) {
+	static void checkBasket(int picItem) {
 		if(basketList.get(basketList.size()-1).equals(picItem)) {
 			basketList.remove(basketList.size()-1);
 			count++;
@@ -139,7 +139,7 @@ public class CraneGame {
 		picCount++;
 	}
 	
-	public static int checkFinished() {
+	static int checkFinished() {
 		int reminder = 0;
 		for(int i=1;i<board.length-1; i++) {
 			for(int j=1; j<board.length-1; j++) {
@@ -155,17 +155,15 @@ public class CraneGame {
 	
 	static List<Integer> basket = new LinkedList<>();
 	
-    public static int solution(int[][] board, int[] moves) {
-    	
+    static int solution(int[][] board, int[] moves) {
     	int count=0;
         for(int item : moves){
         	count += picker(board ,item-1);
         }
-        
         return count;
     }
     
-    public static int picker(int[][] board,int x) {
+    static int picker(int[][] board,int x) {
     	int pic=0, add = 0;
 		for(int i=0;i<board.length; i++) {
 			if(board[i][x] != 0) {
@@ -182,7 +180,7 @@ public class CraneGame {
 		return add;
 	}
     
-	public static int checkBaskets(int picItem) {
+	static int checkBaskets(int picItem) {
 		int add = 0;
 		if(basket.get(basket.size()-1).equals(picItem)) {
 			basket.remove(basket.size()-1);

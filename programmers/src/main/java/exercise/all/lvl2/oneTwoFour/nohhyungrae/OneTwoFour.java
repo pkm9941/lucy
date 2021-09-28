@@ -6,6 +6,8 @@ import java.util.Queue;
 
 public class OneTwoFour {
 	
+	//private static StopWatch stopWatch = new StopWatch;
+	
 	public static void main(String[] args) {
 		
 		int n = 1000000; 
@@ -21,30 +23,36 @@ public class OneTwoFour {
 		System.out.println("10진수 : "+n);
 		List<Integer> num = new LinkedList<>();
 		
-		while(n > 0) {
-			
-			if(num.isEmpty()) {
-				num.add(oneTwoFour2[index]);
-			}else {
-				num = increaseNum(num,oneTwoFour2, index, 1);
-				
-			}
-			System.out.println("num : "+num+" , num.size() : "+num.size());
-			n--;
+		for(int i=0; i<=n; i*=3) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+			System.out.println("i : "+i+" , i%3 : "+i%3);
+			answer += oneTwoFour2[i%3];
 		}
 
 		
-		for(int a : num) {
-			System.out.println("num : "+a);
-			answer += a;
-		}
 		
+		//increaseNum 방법 - 효율성이 안됨
+//		while(n > 0) {
+//			if(num.isEmpty()) {
+//				num.add(oneTwoFour2[index]);
+//			}else {
+//				num = increaseNum(num,oneTwoFour2, index, 1);
+//				
+//			}
+//			System.out.println("num : "+num+" , num.size() : "+num.size());
+//			n--;
+//		}
+//		
+//		for(int a : num) {
+//			System.out.println("num : "+a);
+//			answer += a;
+//		}
+		
+		//condination 방법
 //		condination(oneTwoFour,n,0);
 //		for(int a : list) {
 //			System.out.println("list : "+a);
 //			answer += a;
 //		}
-
 		
 		return answer;
 	}
@@ -56,10 +64,7 @@ public class OneTwoFour {
 			num.set(i, oneTwoFour[2]);
 		}else {
 			boolean tf = true;
-			
-//			if(num.contains(1) || num.contains(2)) {
-//				tf = false;
-//			}
+
 			for(int a : num) { if(a != 4) {tf = false; break;} }
 			
 			if(tf) {

@@ -17,12 +17,10 @@ public class OpenChat {
 	public static String[] solution(String[] record) {
         String[] answer = {};
         List<Map<String,String>> result = new ArrayList<Map<String,String>>();
-        Map<String,String> member = new HashMap<>();
+        Map<String,String> member = new HashMap<>(); // id + 닉네임
         String[] row = new String[3];
-        String total = "";
-        List<String> res = new ArrayList<String>();
         for(String rows : record) {
-        	Map<String,String> answers = new HashMap<String,String>();
+        	Map<String,String> answers = new HashMap<String,String>(); //id + 설명
         	row = rows.split(" ");
     		
     		switch (row[0]) {

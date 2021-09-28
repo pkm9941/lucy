@@ -48,7 +48,9 @@ public class Spy {
 		String[][] clothes2 = {{"crowmask", "face"}
 							 , {"crowmask", "face"}
 							 , {"bluesunglasses", "face"}
-							 , {"smoky_makeup", "face"}};
+							 , {"smoky_makeup", "face"}
+							 , {"bluesunglasses", "face11"}
+							 , {"smoky_makeup", "face12"}};
 		
 		System.out.println("solution : "+solution(clothes2));
     }
@@ -76,7 +78,7 @@ public class Spy {
         
         //모든경우(30가지)의 수는 재귀로 하게되면 시간초과가 나와서 따로 경우의 수 구해줌
         if(variety.size() == 30) {
-        	return (int) Math.pow(2, clothes.length) -1;
+        	return (int) Math.pow(2, variety.size()) -1;
         }
         //map에 정리해둔 의상 별 가지수
         int[] num = new int[variety.size()];
@@ -86,6 +88,7 @@ public class Spy {
         
         int n = num.length;
         boolean[] visited = new boolean[n];
+        
         for (int i = 1; i <= n; i++) {
             //경우의수 구하기
             combination(num, visited, 0, n, i);
@@ -98,12 +101,12 @@ public class Spy {
 	public static void combination(int[] arr, boolean[] check, int start, int n, int r) {
         if (r == 0) {
         	int value = 1;
-        	 for (int i = 0; i < n; i++) {
+        	for (int i = 0; i < n; i++) {
                  if (check[i]) {
                      System.out.print(arr[i] + " ");
                      value = value * arr[i];
                  }
-             }
+            }
         	totalNumber += value;
             return;
         }
@@ -111,7 +114,7 @@ public class Spy {
         for (int i = start; i < n; i++) {
         	check[i] = true;
             combination(arr, check, i + 1, n, r - 1);
-            check[i] = false;
+            //check[i] = false;
         }
     }
 	

@@ -10,7 +10,7 @@ public class HIndex {
 		int [] citations2 = {0,1,2,3,3,3,3,3,3,4,10,20,30,40};
 		int [] citations3 = {22,42};
 		
-		System.out.println("solution : "+solution(citations));
+		System.out.println("solution : "+solution(citations3));
 	}
 	
 	public static int solution(int[] citations) {
@@ -24,7 +24,6 @@ public class HIndex {
         	else
                 answer = i+1;
         }
-        
         
         return answer;
     }
