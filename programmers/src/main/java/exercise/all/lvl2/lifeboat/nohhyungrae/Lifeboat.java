@@ -24,15 +24,35 @@ public class Lifeboat {
 		int[] people4 = {40, 40, 40, 40, 40, 40};
 		int limit4 = 240;
 		
-		System.out.println("solution : "+solution6(people3, limit3));
+		System.out.println("solution : "+solution(people2, limit2));
 	}
 	
+	//정확성 100 효율성 10 
 	public static int solution(int[] people, int limit) {
-		int answer = 0, tot = 0, index = 0;
+		int answer = 0, tot = 0, index =0;
         boolean sof = false;
-		Arrays.sort(people);
-		for(int i =0; i<=people.length/2; i++) { //1개더
+        List<Integer> list = new ArrayList<Integer>();
+        list = Arrays.stream(people).boxed().collect(Collectors.toList());
+        Collections.sort(list);
+        
+		while(index < Math.ceil((double)list.size()/2)) {
+			tot = limit - list.get(index);
+			sof = false;
+			for(int j=list.size()-1; j>index; j--) {
+				int a = list.get(j);
+                if(a <= tot) {
+                    answer++;
+                    list.remove(j);
+                    list.remove(index);
+                    sof = true;
+                    break;
+                }
+			}
 			
+			if(!sof) {
+    			answer = answer +  list.size();
+    			break;
+    		}
 		}
 		return answer;
 	}
@@ -71,16 +91,16 @@ public class Lifeboat {
         	}
     		*/
     		
-    		for(int j=list.size()-1 ; j>index; j--) {
-    			if(tot != 0) {
-    				if(list.get(j).equals(tot) || list.get(j) < tot) {
-    					list.remove(j);
-    					list.remove(index);
-    					answer++;
-    					sof = true;
-    					break;
-    				}
-    			}
+            for(int j=list.size()-1 ; j>index; j--) {
+    			int a = list.get(j);
+                if(a <= tot) {
+                	System.out.println("FRONT : "+list.get(index)+", BACK : "+list.get(j));
+                    list.remove(j);
+                    list.remove(index);
+                    answer++;
+                    sof = true;
+                    break;
+                }
         	}
         	
     		if(!sof) {
