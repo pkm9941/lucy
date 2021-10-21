@@ -58,19 +58,19 @@ public class ColoringBook {
 
 	public int[] solution() {
 		
-		while(true) {
-			int[] startBlock = findStartBlock();
-			if (startBlock[0] < 0)
-				break;
-			
-			int color = picture[startBlock[0]][startBlock[1]];
-			int size = getSizeOfConnectedSectionByStack(startBlock, color);
-			if (size == 0)
-				break;
-			
-			numberOfArea += 1;
-			if (size > maxSizeOfOneArea)
-				maxSizeOfOneArea = size;
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				int color = picture[i][j];
+				if (color == 0)
+					continue;
+				
+				int[] startBlock = {i, j};
+				int size = getSizeOfConnectedSectionByStack(startBlock, color);
+				
+				numberOfArea += 1;
+				if (size > maxSizeOfOneArea)
+					maxSizeOfOneArea = size;
+			}
 		}
 		
 		int[] answer = {numberOfArea, maxSizeOfOneArea};
