@@ -27,10 +27,11 @@ public class ColoringBook {
 	}
 
 	public static void main(String[] args) {
-		int m = 6;
-		int n = 4;
-		int[][] picture = {{1, 1, 1, 0}, {1, 2, 2, 0}, {1, 0, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 3}, {0, 0, 0, 3}};
-		
+		//sample 1
+//		int m = 6;
+//		int n = 4;
+//		int[][] picture = {{1, 1, 1, 0}, {1, 2, 2, 0}, {1, 0, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 3}, {0, 0, 0, 3}};
+		//sample 2
 //		int m = 5, n = 5;
 //		int[][] picture = {{1,2,3,4,5}
 //						,  {1,2,3,4,5}
@@ -38,33 +39,58 @@ public class ColoringBook {
 //						,  {6,2,6,4,6}
 //						,  {6,6,6,6,6}
 //						};
-//		int m = 100; int n = 100;
-//		int[][] picture = new int[100][100];
-//		for (int i = 0; i < 100; i++) {
-//			for (int j = 0; j < 100; j++) {
-//				picture[i][j] = (int) Math.round(1 + Math.random()*0.1);
-//			}
-//		}
+		//sample 3 - 최대 크기
+		int m = 100; int n = 100;
+		int[][] picture = new int[100][100];
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < 100; j++) {
+				picture[i][j] = (int) Math.round(1 + Math.random()*1);
+			}
+		}
 		
 		ColoringBook coloringBook = new ColoringBook(m, n, picture);
-		int[] answer = coloringBook.solution();
-		System.out.println("numberOfArea : " + answer[0] + ", maxSizeOfOneArea : " + answer[1]);
+		int[] answer = coloringBook.solution();//스택
+		System.out.println("스택 - numberOfArea : " + answer[0] + ", maxSizeOfOneArea : " + answer[1]);
+		ColoringBook coloringBook2 = new ColoringBook(m, n, picture);
+		int[] answer2 = coloringBook2.solution2();//재귀
+		System.out.println("재귀 - numberOfArea : " + answer2[0] + ", maxSizeOfOneArea : " + answer2[1]);
 	}
 
 	public int[] solution() {
 		
 		while(true) {
-			int[] startPosition = findStartPosition();
-			if (startPosition[0] < 0)
+			int[] startBlock = findStartBlock();
+			if (startBlock[0] < 0)
 				break;
 			
-			int color = picture[startPosition[0]][startPosition[1]];
-			int size = getSizeOfConnectedOneColor2(startPosition, color);
+			int color = picture[startBlock[0]][startBlock[1]];
+			int size = getSizeOfConnectedSectionByStack(startBlock, color);
 			if (size == 0)
 				break;
-			System.out.println("color : " + color + ", size : " + size);
+			
 			numberOfArea += 1;
-			if (maxSizeOfOneArea < size)
+			if (size > maxSizeOfOneArea)
+				maxSizeOfOneArea = size;
+		}
+		
+		int[] answer = {numberOfArea, maxSizeOfOneArea};
+		return answer;
+	}
+	
+	public int[] solution2() {
+		
+		while(true) {
+			int[] startBlock = findStartBlock();
+			if (startBlock[0] < 0)
+				break;
+			
+			int color = picture[startBlock[0]][startBlock[1]];
+			int size = getSizeOfConnectedSectionByRecursive(startBlock, color);
+			if (size == 0)
+				break;
+			
+			numberOfArea += 1;
+			if (size > maxSizeOfOneArea)
 				maxSizeOfOneArea = size;
 		}
 		
@@ -72,32 +98,7 @@ public class ColoringBook {
 		return answer;
 	}
 
-	private int getSizeOfConnectedOneColor2(int[] startPosition, int color) {
-		int size = 0;
-		Stack<int[]> positions = new Stack<int[]>();
-		positions.push(startPosition);
-		while (!positions.isEmpty()) {
-			int[] position = positions.pop();
-			if (position[0] < 0 || position[0] >= m || position[1] < 0 || position[1] >= n)
-				continue;
-			
-			int thisColor = picture[position[0]][position[1]];
-			if (thisColor != color)
-				continue;
-			
-			size++;
-			picture[position[0]][position[1]] = 0;
-			
-			positions.push(new int[]{position[0] - 1, position[1]});
-			positions.push(new int[]{position[0] + 1, position[1]});
-			positions.push(new int[]{position[0], position[1] - 1});
-			positions.push(new int[]{position[0], position[1] + 1});
-		}
-		
-		return size;
-	}
-
-	private int[] findStartPosition() {
+	private int[] findStartBlock() {
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
 				if (picture[i][j] > 0)
@@ -107,25 +108,67 @@ public class ColoringBook {
 		return new int[]{-1, -1};
 	}
 
-	private int getSizeOfConnectedOneColor(int[] position, int color) {
-		if (position[0] < 0 || position[0] >= m || position[1] < 0 || position[1] >= n)
+	private int getSizeOfConnectedSectionByStack(int[] startBlock, int color) {
+		int sizeOfConnectedSection = 0;
+		Stack<int[]> blocksToSearch = new Stack<int[]>();
+		blocksToSearch.push(startBlock);
+		
+		while (!blocksToSearch.isEmpty()) {
+			int[] block = blocksToSearch.pop();
+			if (isOutsideOfPicture(block))
+				continue;
+			
+			if (!isSameColor(block, color))
+				continue;
+			
+			sizeOfConnectedSection++;
+			removeColor(block);
+			
+			pushSideBlocksOf(block, blocksToSearch);
+		}
+		
+		return sizeOfConnectedSection;
+	}
+
+	private boolean isOutsideOfPicture(int[] block) {
+		return block[0] < 0 || block[0] >= m || block[1] < 0 || block[1] >= n;
+	}
+
+	private boolean isSameColor(int[] block, int color) {
+		return color == picture[block[0]][block[1]];
+	}
+
+	private void removeColor(int[] block) {
+		picture[block[0]][block[1]] = 0;
+	}
+
+	private void pushSideBlocksOf(int[] block, Stack<int[]> blocksToSearch) {
+		blocksToSearch.push(new int[]{block[0] - 1, block[1]});
+		blocksToSearch.push(new int[]{block[0] + 1, block[1]});
+		blocksToSearch.push(new int[]{block[0], block[1] - 1});
+		blocksToSearch.push(new int[]{block[0], block[1] + 1});
+	}
+
+	private int getSizeOfConnectedSectionByRecursive(int[] block, int color) {
+		if (isOutsideOfPicture(block))
 			return 0;
 		
-		int thisColor = picture[position[0]][position[1]];
-		
-		if (thisColor != color)
+		if (!isSameColor(block, color))
 			return 0;
 		
-		int matchedColorCnt = 1;
-		picture[position[0]][position[1]] = 0;
+		removeColor(block);
 		
-		matchedColorCnt += getSizeOfConnectedOneColor(new int[]{position[0] - 1, position[1]}, color)//위
-						+  getSizeOfConnectedOneColor(new int[]{position[0] + 1, position[1]}, color)//아래
-						+  getSizeOfConnectedOneColor(new int[]{position[0], position[1] - 1}, color)//왼쪽
-						+  getSizeOfConnectedOneColor(new int[]{position[0], position[1] + 1}, color)//오른쪽
+		int sizeOfConnectedSection = 1 + getSideBlocks(block, color);
+		
+		return sizeOfConnectedSection;
+	}
+
+	private int getSideBlocks(int[] block, int color) {
+		return getSizeOfConnectedSectionByRecursive(new int[]{block[0] - 1, block[1]}, color)//위
+			 +  getSizeOfConnectedSectionByRecursive(new int[]{block[0] + 1, block[1]}, color)//아래
+			 +  getSizeOfConnectedSectionByRecursive(new int[]{block[0], block[1] - 1}, color)//왼쪽
+			 +  getSizeOfConnectedSectionByRecursive(new int[]{block[0], block[1] + 1}, color)//오른쪽
 		;
-		
-		return matchedColorCnt;
 	}
 
 }
