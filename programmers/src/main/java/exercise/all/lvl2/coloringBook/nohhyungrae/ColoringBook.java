@@ -14,12 +14,12 @@ public class ColoringBook {
 		int n = 4;
 		int[][] picture = {{1, 1, 1, 0}, {1, 2, 2, 0}, {1, 0, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 3}, {0, 0, 0, 3}};
 		
-		System.out.println("solution : "+solution(m,n,picture));
+		System.out.println("solution : "+solution(m, n, picture));
 		
 	}
 	
 	static Map<Integer,Integer> numMap = new LinkedHashMap<>();
-	static List<Integer> num = new ArrayList<Integer>();
+	static List<Integer> numList = new ArrayList<Integer>();
 	
 	public static int[] solution(int m, int n, int[][] picture) {
         //그림에 몇 개의 영역
@@ -28,52 +28,50 @@ public class ColoringBook {
         int maxSizeOfOneArea = 0;
         int top = -1;
         
-        for(int i=0; i<picture.length; i++) {
-        	recall(i, 0, picture,picture[i].length,0, top ,0);
+        for(int i=0; i<m; i++) {
+        	recursion(i, 0, picture, n, 0, top ,0);
         }
         
-		for(int q : numMap.keySet()) {
-			num.add(numMap.get(q));
+		for(int key : numMap.keySet()) {
+			numList.add(numMap.get(key));
 		}
 
-        System.out.println();
         int[] answer = new int[2];
-        answer[0] = numberOfArea = num.size();
-        answer[1] = maxSizeOfOneArea = Collections.max(num);
+        answer[0] = numberOfArea = numList.size();
+        answer[1] = maxSizeOfOneArea = Collections.max(numList);
         System.out.println("answer : [ "+numberOfArea+" , "+maxSizeOfOneArea+" ]");
         return answer;
     }
 	
-	public static int recall(int i, int j, int[][] picture,int len, int before,int top, int result) {
+	public static int recursion(int i, int j, int[][] picture,int len, int before,int top, int result) {
 
 		if(len == j)
 			return 0;
 		
-		if(i - 1 >= 0) {
+		if(i - 1 >= 0) 
 			top = picture[i-1][j];
-		}
+		
 		
 		if(picture[i][j] != 0) {
 			if(top != 0) {
 				if(picture[i][j] == before) {
 					numMap.put(picture[i][j], numMap.get(picture[i][j])+1);	
 				}else {
-					if(top == picture[i][j]) {
+					if(top == picture[i][j]) 
 						numMap.put(picture[i][j], numMap.get(picture[i][j])+1);	
-					}else {
+					else 
 						numMap.put(picture[i][j], 1);
-					}
 				}
 			}else{
 				if(numMap.containsKey(picture[i][j])) {
-					num.add(numMap.get(picture[i][j]));
+					numList.add(numMap.get(picture[i][j]));
 					numMap.remove(picture[i][j]);
 					numMap.put(picture[i][j], 1);
 				}
 			}
 		}
 		
-		return recall(i,j+1, picture,len , picture[i][j], top, result);
+		return recursion(i,j+1, picture,len , picture[i][j], top, result);
 	}
 
 }
