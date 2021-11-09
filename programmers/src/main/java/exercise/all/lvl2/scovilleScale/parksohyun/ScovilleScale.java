@@ -28,8 +28,8 @@ public class ScovilleScale {
         		return answer;
         	}
         	
-        	int first = list.pollFirst();
-        	int second = list.pollFirst(); 
+        	int first = list.poll();
+        	int second = list.poll(); 
         	int sum= first + (second * 2);
         	
         	list.add(sum);
