@@ -7,55 +7,143 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class ScovilleScale {
+
+	private int k;
+	Queue<Integer> sortedScovilles;
+	private int mixedCnt = 0;
+	//혼합하여 생성된 새로운 물질도 재료가 되므로 기존 재료 목록에 추가해야 하는데 정렬 상태를 유지하며 추가하기가 힘든 상황...(혼합할 때마다 정렬해야 하는 비용 큼)
+	//혼합한 재료는 특성상 혼합한 시간과 스코빌지수가 상관관계가 있으므로(나중에 혼합된 재료의 스코빌지수가 먼저 혼합된 스코빌지수보다 작을 수 없음)
+	//이들만 별도의 컬렉션으로 관리해서 정렬 상태를 유지하고자 함
+	Queue<Integer> mixedScovilles = new LinkedList<>();
+	boolean isAllFoodsMoreSpicyThanK = false;
 	
+	public ScovilleScale(int[] scovilleArray, int k) {
+		this.k = k;
+		Arrays.sort(scovilleArray);
+		sortedScovilles = new LinkedList<>();
+		for (int scoville : scovilleArray)
+			sortedScovilles.add(scoville);
+	}
+
 	public static void main(String[] args) {
 //		System.out.println(getCnt1(new int[]{1, 2, 3, 9, 10, 12}, 7));
 //		System.out.println(getCnt2(new int[]{1, 2, 3, 9, 10, 12}, 7));
-		System.out.println(getCntBySortEveryTimeMix(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 350));
-		System.out.println(getCntByDivideMixedScovilles(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 350));
+		ScovilleScale scovilleScale = new ScovilleScale(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 20);
+		scovilleScale.mixUntilAllFoodMoreSpicyThanK();
+		System.out.println(scovilleScale.getMixedCnt());
+		System.out.println(getCntBySortEveryTimeMix(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 20));
+		System.out.println(getCntByDivideMixedScovilles(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 20));
 	}
 
-	private static int getCntByDivideMixedScovilles(int[] scovilleArray, int base) {
+	private int getMixedCnt() {
+		return mixedCnt;
+	}
+
+	private void mixUntilAllFoodMoreSpicyThanK() {
+		while(true) {
+			mixTwoLeastSpicyFoodsUntilCleanFoodsEmpty();
+			if (isAllFoodsMoreSpicyThanK)
+				break;
+			
+			if (noMoreFood()) {
+				mixedCnt = -1;
+				break;
+			}
+			
+			moveMixedFoodToCleanFood();
+		}
+	}
+
+	/**
+	 * 섞은 음식끼리 다시 섞기 위해 섞은 음식들을 순수 음식용 컬렉션에 옮겨 담는다. 
+	 * @author 박광민
+	 * @since 2021. 11. 9.
+	 */
+	private void moveMixedFoodToCleanFood() {
+		sortedScovilles = mixedScovilles;
+		mixedScovilles = new LinkedList<>();
+	}
+
+	private boolean noMoreFood() {
+		return mixedScovilles.isEmpty();
+	}
+
+	public void mixTwoLeastSpicyFoodsUntilCleanFoodsEmpty() {
+		isAllFoodsMoreSpicyThanK = false;
+		while(!sortedScovilles.isEmpty()) {
+			Integer firstSmallScoville = pollFirstSmallScoville();
+			if (firstSmallScoville >= k) {
+				isAllFoodsMoreSpicyThanK = true;
+				return;
+			}
+			
+			Integer secondSmallScoville = pollFirstSmallScoville();
+			if (secondSmallScoville == null)
+				return;
+			
+			int mixedScoville = firstSmallScoville + secondSmallScoville * 2;
+			mixedCnt++;
+			
+			mixedScovilles.add(mixedScoville);
+		}
+	}
+
+	public Integer pollFirstSmallScoville() {
+		Integer firstSmallScoville = 0;
+		if (sortedScovilles.peek() == null) {
+			firstSmallScoville = mixedScovilles.poll();
+		} else if (mixedScovilles.peek() == null) {
+			firstSmallScoville = sortedScovilles.poll();
+		} else {
+			firstSmallScoville = sortedScovilles.peek() <= mixedScovilles.peek() ? sortedScovilles.poll() : mixedScovilles.poll();
+		}
+		return firstSmallScoville;
+	}
+
+	private static int getCntByDivideMixedScovilles(int[] scovilleArray, int k) {
 		Arrays.sort(scovilleArray);
 		Queue<Integer> scovilles = new LinkedList<>();
 		for (int scoville : scovilleArray)
 			scovilles.add(scoville);
 		
 		int combineCnt = 0;
-		Queue<Integer> combinedScovilles = new LinkedList<>();
+		//혼합하여 생성된 새로운 물질도 재료가 되므로 기존 재료 목록에 추가해야 하는데 정렬 상태를 유지하며 추가하기가 힘든 상황...(혼합할 때마다 정렬해야 하는 비용 큼)
+		//혼합한 재료는 특성상 혼합한 시간과 스코빌지수가 상관관계가 있으므로(나중에 혼합된 재료의 스코빌지수가 먼저 혼합된 스코빌지수보다 작을 수 없음)
+		//이들만 별도의 컬렉션으로 관리해서 정렬 상태를 유지하고자 함
+		Queue<Integer> mixedScovilles = new LinkedList<>();
 		while(true) {
-			if (scovilles.isEmpty() && !combinedScovilles.isEmpty()) {
-				scovilles = combinedScovilles;
-				combinedScovilles = new LinkedList<>();
+			if (scovilles.isEmpty() && !mixedScovilles.isEmpty()) {
+				scovilles = mixedScovilles;
+				mixedScovilles = new LinkedList<>();
 				continue;
 			}
 			
-			Integer firstScoville = 0;
+			Integer firstSmallScoville = 0;
 			if (scovilles.peek() == null) {
-				firstScoville = combinedScovilles.poll();
-			} else if (combinedScovilles.peek() == null) {
-				firstScoville = scovilles.poll();
+				firstSmallScoville = mixedScovilles.poll();
+			} else if (mixedScovilles.peek() == null) {
+				firstSmallScoville = scovilles.poll();
 			} else {
-				firstScoville = scovilles.peek() <= combinedScovilles.peek() ? scovilles.poll() : combinedScovilles.poll();
+				firstSmallScoville = scovilles.peek() <= mixedScovilles.peek() ? scovilles.poll() : mixedScovilles.poll();
 			}
 			
-			if (firstScoville >= base) break;
+			if (firstSmallScoville >= k) break;
 			
-			Integer secondScoville = null;
+			Integer secondSmallScoville = null;
 			if (scovilles.peek() == null) {
-				secondScoville = combinedScovilles.poll();
-			} else if (combinedScovilles.peek() == null) {
-				secondScoville = scovilles.poll();
+				secondSmallScoville = mixedScovilles.poll();
+			} else if (mixedScovilles.peek() == null) {
+				secondSmallScoville = scovilles.poll();
 			} else {
-				secondScoville = scovilles.peek() <= combinedScovilles.peek() ? scovilles.poll() : combinedScovilles.poll();
+				secondSmallScoville = scovilles.peek() <= mixedScovilles.peek() ? scovilles.poll() : mixedScovilles.poll();
 			}
 			
-			if (secondScoville == null) return -1;
+			if (secondSmallScoville == null) return -1;
 
-			int combinedScoville = firstScoville + secondScoville * 2;
+			int mixedScoville = firstSmallScoville + secondSmallScoville * 2;
 			combineCnt++;
 			
-			combinedScovilles.add(combinedScoville);
+			mixedScovilles.add(mixedScoville);
 		}
 		
 		return combineCnt;
