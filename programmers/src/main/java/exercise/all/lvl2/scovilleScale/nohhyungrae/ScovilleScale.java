@@ -34,9 +34,7 @@ public class ScovilleScale {
 	public int solution() {
 		int answer = 0;
 
-		for (int s : scoville) {
-			que.add(s);
-		}
+		for (int s : scoville) { que.add(s); }
 
 		while (true) {
 
