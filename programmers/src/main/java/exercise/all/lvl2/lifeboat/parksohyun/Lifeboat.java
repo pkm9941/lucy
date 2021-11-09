@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Lifeboat {
 
 	public static void main(String[] args) {
-		int[] people = {10,20,30,40,50,60,100};
+		int[] people = {100,100};
 		int limit =100;
 		System.out.println(solution(people,limit));
 	}
@@ -39,6 +39,7 @@ public class Lifeboat {
 		for(int i=0;i<people.length;i++){
 			for(int j=jLen-1;j>=i;j--) {
 				if(people[j]+people[i]>limit) {
+					jLen=j;
 					answer++;
 				}else {
 					jLen=j;

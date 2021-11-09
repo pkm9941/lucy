@@ -36,6 +36,7 @@ public class Carpet {
         	System.out.println(a);
         }
         return answer;
+        
     }
 	
 	public static int solution2(int brown, int yellow) {
