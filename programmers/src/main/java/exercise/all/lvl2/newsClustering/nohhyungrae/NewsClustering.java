@@ -215,7 +215,6 @@ public class NewsClustering {
 			}
 			dif.addAll(string2);
 			tot.retainAll(string22);
-			
 		}
 		
 		

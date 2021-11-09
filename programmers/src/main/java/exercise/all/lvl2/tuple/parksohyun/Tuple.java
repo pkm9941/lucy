@@ -51,6 +51,7 @@ public class Tuple {
 		  return answer;
 	 }
 	
+	//https://ithub.tistory.com/34
 	public static List sortByValue(final Map map) {
 		List<String> list = new ArrayList<>();
 		list.addAll(map.keySet());
